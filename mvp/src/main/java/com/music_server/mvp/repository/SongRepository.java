@@ -1,0 +1,8 @@
+/* package com.music_server.mvp.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.music_server.mvp.model.Song;
+
+public interface SongRepository extends JpaRepository<Song, Long>{}
+ */

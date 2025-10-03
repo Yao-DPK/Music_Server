@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:14
+    container_name: musicdb
+    environment:
+      POSTGRES_DB: musicdb
+      POSTGRES_USER: pyke_music
+      POSTGRES_PASSWORD: PyKe@2709@music
+    ports:
+      - "5435:5432"
+    volumes:
+      - /var/lib/postgresql/data
