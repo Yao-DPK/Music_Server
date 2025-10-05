@@ -5,12 +5,14 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.music_server.database.config.dao.impl.UserDaoImpl;
+import com.music_server.database.config.dao.impl.UserDaoImpl.UserRowMapper;
 import com.music_server.database.config.domain.Song;
 import com.music_server.database.config.domain.User;
 
@@ -33,6 +35,17 @@ public class UserDaoImplTests {
             eq("INSERT INTO users (username, password) VALUES (?, ?)"),
             eq("Pyke"), eq("Pyke")
             );
+    }
+
+    @Test
+    public void ReadOneUserTest(){
+        test_user.findOne("Pyke");
+
+        verify(jdbcTemplate).query(
+            eq("SELECT id, username FROM users WHERE username = ? LIMIT 1"),
+            ArgumentMatchers.<UserDaoImpl.UserRowMapper>any(),
+            eq("Pyke")
+        );
 
     }
 }

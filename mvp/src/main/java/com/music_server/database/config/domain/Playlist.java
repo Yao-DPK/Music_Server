@@ -24,6 +24,11 @@ public class Playlist {
     
     
 
+    public Playlist(Long id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
     public Playlist(String title) {
         this.title = title;
     }

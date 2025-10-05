@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -12,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.music_server.database.config.dao.impl.PlaylistDaoImpl;
 import com.music_server.database.config.domain.Playlist;
+import com.music_server.database.config.domain.Song;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -33,4 +35,14 @@ public class PlaylistDaoImplTests {
             eq("Sport"));
     }
 
+    @Test
+    public void ReadOnePlaylistTest(){
+        test_playlist.findOne("Sport");
+
+        verify(jdbcTemplate).query(
+            eq("SELECT id, title FROM playlist WHERE title = ? LIMIT 1"), 
+            ArgumentMatchers.<PlaylistDaoImpl.PlaylistRowMapper>any(),
+            eq("Sport")
+            );
+    }
 }

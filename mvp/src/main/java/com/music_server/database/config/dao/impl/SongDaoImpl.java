@@ -1,5 +1,14 @@
 package com.music_server.database.config.dao.impl;
 
+import static org.mockito.ArgumentMatchers.eq;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Optional;
+
+import org.springframework.jdbc.core.RowMapper;
+import java.util.List;
+import org.mockito.ArgumentMatchers;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.music_server.database.config.dao.SongDao;
@@ -20,5 +29,20 @@ public class SongDaoImpl implements SongDao{
             song.getTitle()
         );
     }
+    
+    @Override
+    public Optional<Song> findOne(String title) {
+        List<Song> results = jdbcTemplate.query("SELECT id, title FROM song WHERE title = ? LIMIT 1", 
+        new SongRowMapper(), title);
 
+        return results.stream().findFirst();
+    }
+
+    public static class SongRowMapper implements RowMapper<Song>{
+
+        @Override
+        public Song mapRow(ResultSet rs, int rowNumber) throws SQLException {
+            return new Song(rs.getLong("id"), rs.getString("title"));
+        }
+    }
 }

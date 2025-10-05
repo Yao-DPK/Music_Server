@@ -1,10 +1,5 @@
 package com.music_server.database.config.domain;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 @Entity
@@ -32,4 +27,10 @@ public class Song {
         this.title = title;
     }
 
+    public Song(Long id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    
 }   
