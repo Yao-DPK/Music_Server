@@ -1,4 +1,4 @@
-package com.music_server.database.config;
+package com.music_server.mvp.config;
 
 import javax.sql.DataSource;
 

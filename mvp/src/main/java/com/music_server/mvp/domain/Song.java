@@ -1,8 +1,6 @@
-package com.music_server.database.config.domain;
+package com.music_server.mvp.domain;
 import jakarta.persistence.*;
 
-
-@Entity
 
 public class Song {
     
@@ -31,6 +29,12 @@ public class Song {
         this.id = id;
         this.title = title;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    
 
     
 }   

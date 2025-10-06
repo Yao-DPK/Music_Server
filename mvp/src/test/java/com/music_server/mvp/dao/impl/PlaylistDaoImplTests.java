@@ -1,7 +1,9 @@
-package com.music_server.mvp.database.dao;
+package com.music_server.mvp.dao.impl;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,9 +13,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.music_server.database.config.dao.impl.PlaylistDaoImpl;
-import com.music_server.database.config.domain.Playlist;
-import com.music_server.database.config.domain.Song;
+import com.music_server.mvp.TestDataUtil;
+import com.music_server.mvp.dao.impl.PlaylistDaoImpl;
+import com.music_server.mvp.domain.Playlist;
+import com.music_server.mvp.domain.Song;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +39,7 @@ public class PlaylistDaoImplTests {
             eq("Sport"));
     }
 
+
     @Test
     public void ReadOnePlaylistTest(){
         test_playlist.findOne("Sport");
@@ -45,4 +50,6 @@ public class PlaylistDaoImplTests {
             eq("Sport")
             );
     }
+
+
 }

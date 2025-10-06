@@ -1,4 +1,4 @@
-package com.music_server.database.config.dao.impl;
+package com.music_server.mvp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,11 +7,14 @@ import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
-import com.music_server.database.config.dao.PlaylistDao;
-import com.music_server.database.config.domain.Playlist;
-import com.music_server.database.config.domain.Song;
+import com.music_server.mvp.dao.PlaylistDao;
+import com.music_server.mvp.domain.Playlist;
+import com.music_server.mvp.domain.Song;
 
+
+@Component
 public class PlaylistDaoImpl implements PlaylistDao{
 
     private final JdbcTemplate jdbcTemplate;
@@ -26,6 +29,31 @@ public class PlaylistDaoImpl implements PlaylistDao{
             "INSERT INTO playlist (title) VALUES (?)",
             playlist.getTitle()
         );
+    }
+
+    @Override
+    public int count_songs(Playlist playlist) {
+
+        int count = jdbcTemplate.queryForObject(
+            "SELECT COUNT(*) FROM playlist_item WHERE playlist_id = ?",
+            Integer.class,
+            playlist.getId()
+        );
+
+        return count;
+    }
+
+    @Override
+
+    public void add_song(Playlist playlist, Song song) {
+
+        int count = count_songs(playlist);
+
+        jdbcTemplate.update(
+            "INSERT INTO playlist_item  (playlist_id, song_id, position) VALUES (?, ?, ?)",
+            playlist.getId(), song.getId(), count + 1
+        );
+
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.music_server.database.config.domain;
+package com.music_server.mvp.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,7 +7,6 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 
-@Entity
 public class PlaylistItem {
     @Id
     @GeneratedValue
@@ -22,6 +21,15 @@ public class PlaylistItem {
 
     public PlaylistItem() {
     }
+
+    
+
+    public PlaylistItem(Long playlist_id, Long song_id) {
+        this.playlist_id = playlist_id;
+        this.song_id = song_id;
+    }
+
+
 
     public PlaylistItem(Long playlist_id, Long song_id, int position) {
         this.playlist_id = playlist_id;

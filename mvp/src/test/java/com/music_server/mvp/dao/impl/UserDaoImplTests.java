@@ -1,4 +1,4 @@
-package com.music_server.mvp.database.dao;
+package com.music_server.mvp.dao.impl;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -11,10 +11,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.music_server.database.config.dao.impl.UserDaoImpl;
-import com.music_server.database.config.dao.impl.UserDaoImpl.UserRowMapper;
-import com.music_server.database.config.domain.Song;
-import com.music_server.database.config.domain.User;
+import com.music_server.mvp.dao.impl.UserDaoImpl;
+import com.music_server.mvp.dao.impl.UserDaoImpl.UserRowMapper;
+import com.music_server.mvp.domain.Song;
+import com.music_server.mvp.domain.User;
 
 
 @ExtendWith(MockitoExtension.class)

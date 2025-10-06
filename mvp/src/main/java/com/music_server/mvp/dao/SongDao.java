@@ -1,8 +1,8 @@
-package com.music_server.database.config.dao;
+package com.music_server.mvp.dao;
 
 import java.util.Optional;
 
-import com.music_server.database.config.domain.Song;
+import com.music_server.mvp.domain.Song;
 
 public interface SongDao {
 

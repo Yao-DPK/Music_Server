@@ -1,4 +1,4 @@
-package com.music_server.database.config.dao.impl;
+package com.music_server.mvp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,12 +7,15 @@ import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
-import com.music_server.database.config.dao.UserDao;
-import com.music_server.database.config.domain.Playlist;
-import com.music_server.database.config.domain.Song;
-import com.music_server.database.config.domain.User;
+import com.music_server.mvp.dao.UserDao;
+import com.music_server.mvp.domain.Playlist;
+import com.music_server.mvp.domain.Song;
+import com.music_server.mvp.domain.User;
 
+
+@Component
 public class UserDaoImpl implements UserDao{
 
     private final JdbcTemplate jdbcTemplate;

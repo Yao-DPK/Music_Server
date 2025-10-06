@@ -1,8 +1,7 @@
-package com.music_server.database.config.domain;
+package com.music_server.mvp.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
 public class User {
     
     @Id

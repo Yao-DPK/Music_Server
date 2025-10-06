@@ -1,4 +1,4 @@
-package com.music_server.database.config.dao.impl;
+package com.music_server.mvp.dao.impl;
 
 import static org.mockito.ArgumentMatchers.eq;
 
@@ -7,13 +7,17 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
+
+import com.music_server.mvp.dao.SongDao;
+import com.music_server.mvp.domain.Song;
+
 import java.util.List;
 import org.mockito.ArgumentMatchers;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.music_server.database.config.dao.SongDao;
-import com.music_server.database.config.domain.Song;
 
+@Component
 public class SongDaoImpl implements SongDao{
 
     private final JdbcTemplate jdbcTemplate;

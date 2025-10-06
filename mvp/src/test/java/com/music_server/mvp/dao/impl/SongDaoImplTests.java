@@ -1,8 +1,4 @@
-package com.music_server.mvp.database.dao;
-import com.music_server.database.config.dao.SongDao;
-import com.music_server.database.config.dao.impl.SongDaoImpl;
-import com.music_server.database.config.domain.Song;
-
+package com.music_server.mvp.dao.impl;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -17,6 +13,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.music_server.mvp.TestDataUtil;
+import com.music_server.mvp.dao.SongDao;
+import com.music_server.mvp.dao.impl.SongDaoImpl;
+import com.music_server.mvp.domain.Song;
+
 @ExtendWith(MockitoExtension.class)
 public class SongDaoImplTests {
 
@@ -28,7 +29,7 @@ public class SongDaoImplTests {
 
     @Test 
     public void testThatCreatePlaylistGeneratesCorrectSql(){
-        Song song = new Song("Sonic CD Palmtree Panic.mp3");
+        Song song = TestDataUtil.createTestSong("Sonic CD Palmtree Panic.mp3");
         test_song.create(song);
 
         verify(jdbcTemplate).update(
@@ -36,6 +37,10 @@ public class SongDaoImplTests {
             eq("Sonic CD Palmtree Panic.mp3")
             );
 
+    }
+
+    private static void getSongforTest(){
+        
     }
 
     @Test

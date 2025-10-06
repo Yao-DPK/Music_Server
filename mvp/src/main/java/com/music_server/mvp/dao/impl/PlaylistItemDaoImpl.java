@@ -1,11 +1,13 @@
-package com.music_server.database.config.dao.impl;
+package com.music_server.mvp.dao.impl;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
-import com.music_server.database.config.dao.PlaylistItemDao;
-import com.music_server.database.config.domain.PlaylistItem;
-import com.music_server.database.config.domain.Song;
+import com.music_server.mvp.dao.PlaylistItemDao;
+import com.music_server.mvp.domain.PlaylistItem;
+import com.music_server.mvp.domain.Song;
 
+@Component
 public class PlaylistItemDaoImpl implements PlaylistItemDao{
     private final JdbcTemplate jdbcTemplate;
 
