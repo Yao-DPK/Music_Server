@@ -40,6 +40,13 @@ public class UserDaoImpl implements UserDao{
         return results.stream().findFirst();
     }
 
+    @Override
+    public List <User> findAll(){
+        return jdbcTemplate.query(
+            "SELECT id, username FROM users", 
+            new UserRowMapper());
+    }
+
     public static class UserRowMapper implements RowMapper<User>{
 
         @Override

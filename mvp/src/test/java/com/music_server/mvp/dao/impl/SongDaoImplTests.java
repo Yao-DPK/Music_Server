@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import com.music_server.mvp.TestDataUtil;
 import com.music_server.mvp.dao.SongDao;
 import com.music_server.mvp.dao.impl.SongDaoImpl;
+import com.music_server.mvp.dao.impl.SongDaoImpl.SongRowMapper;
 import com.music_server.mvp.domain.Song;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,7 +49,13 @@ public class SongDaoImplTests {
             eq("Sonic CD Palmtree Panic.mp3")
             );
     }
+    
+    @Test
+    public void ReadManySongsTest(){
+        test_song.findAll();
 
+        verify(jdbcTemplate).query(eq("SELECT id, title FROM song"), ArgumentMatchers.<SongRowMapper>any());
+    }
     
     
 }

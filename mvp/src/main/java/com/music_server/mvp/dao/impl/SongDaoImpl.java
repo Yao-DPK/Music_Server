@@ -42,6 +42,11 @@ public class SongDaoImpl implements SongDao{
         return results.stream().findFirst();
     }
 
+    @Override
+    public List<Song> findAll(){
+        return jdbcTemplate.query("SELECT id, title FROM song", new SongRowMapper());
+    }
+
     public static class SongRowMapper implements RowMapper<Song>{
 
         @Override

@@ -17,4 +17,5 @@ public interface PlaylistDao {
     Optional<Playlist> findOne(String title);
     
     List<Playlist> findAll();
+    
 }   

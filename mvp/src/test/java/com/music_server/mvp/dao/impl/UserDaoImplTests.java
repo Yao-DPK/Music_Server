@@ -48,5 +48,12 @@ public class UserDaoImplTests {
         );
 
     }
+
+    @Test
+    public void ReadManyUsersTest(){
+        test_user.findAll();
+
+        verify(jdbcTemplate).query(eq("SELECT id, username FROM users"), ArgumentMatchers.<UserRowMapper>any());
+    }
 }
 
