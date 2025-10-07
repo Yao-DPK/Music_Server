@@ -57,6 +57,13 @@ public class PlaylistDaoImpl implements PlaylistDao{
     }
 
     @Override
+    public  List<Playlist> findAll(){
+        return jdbcTemplate.query("SELECT id, title FROM playlist", 
+        new PlaylistRowMapper());
+
+    }
+
+    @Override
     public Optional<Playlist> findOne(String title) {
         List<Playlist> results = jdbcTemplate.query("SELECT id, title FROM playlist WHERE title = ? LIMIT 1", 
         new PlaylistRowMapper(), title);

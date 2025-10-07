@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.music_server.mvp.TestDataUtil;
 import com.music_server.mvp.dao.impl.PlaylistDaoImpl;
+import com.music_server.mvp.dao.impl.PlaylistDaoImpl.PlaylistRowMapper;
 import com.music_server.mvp.domain.Playlist;
 import com.music_server.mvp.domain.Song;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,6 +51,15 @@ public class PlaylistDaoImplTests {
             eq("Sport")
             );
     }
+
+    @Test
+    public void ReadManyPlaylists(){
+        test_playlist.findAll();
+
+        verify(jdbcTemplate).query(eq("SELECT id, title FROM playlist"), 
+        ArgumentMatchers.<PlaylistDaoImpl.PlaylistRowMapper>any());
+    }
+    
 
 
 }

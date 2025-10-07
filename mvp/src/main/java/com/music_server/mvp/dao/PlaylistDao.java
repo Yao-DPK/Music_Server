@@ -1,5 +1,6 @@
 package com.music_server.mvp.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.music_server.mvp.domain.Playlist;
@@ -14,4 +15,6 @@ public interface PlaylistDao {
     public void add_song(Playlist playlist, Song song);
 
     Optional<Playlist> findOne(String title);
-}
+    
+    List<Playlist> findAll();
+}   

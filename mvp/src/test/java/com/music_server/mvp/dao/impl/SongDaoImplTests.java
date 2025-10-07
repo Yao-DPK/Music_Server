@@ -39,10 +39,6 @@ public class SongDaoImplTests {
 
     }
 
-    private static void getSongforTest(){
-        
-    }
-
     @Test
     public void ReadOneSongTest(){
         test_song.findOne("Sonic CD Palmtree Panic.mp3");
@@ -52,4 +48,7 @@ public class SongDaoImplTests {
             eq("Sonic CD Palmtree Panic.mp3")
             );
     }
+
+    
+    
 }
