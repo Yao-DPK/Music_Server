@@ -16,11 +16,22 @@ public class User {
     private String password;
 
 
-    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Playlist> playlists = new ArrayList<>();
+    //@OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<Playlist> playlists = new ArrayList<>();
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Song> songs = new ArrayList<>();
+    //@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<Song> songs = new ArrayList<>();
+    // ----- Constructors -----
+    public User() {}
+
+    public User(String username) {
+        this.username = username;
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     // ----- Getters and Setters -----
     public Long getId() { return id; }
@@ -32,14 +43,14 @@ public class User {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public List<Playlist> getPlaylists() { return playlists; }
+    /* public List<Playlist> getPlaylists() { return playlists; }
     public void setPlaylists(List<Playlist> playlists) { this.playlists = playlists; }
 
     public List<Song> getSongs() { return songs; }
-    public void setSongs(List<Song> songs) { this.songs = songs; }
+    public void setSongs(List<Song> songs) { this.songs = songs; } */
 
     // ----- Utility Methods -----
-    public void addPlaylist(Playlist playlist) {
+    /* public void addPlaylist(Playlist playlist) {
         playlists.add(playlist);
         playlist.setCreator(this);  // lie la playlist à cet utilisateur
     }
@@ -47,9 +58,9 @@ public class User {
     public void removePlaylist(Playlist playlist) {
         playlists.remove(playlist);
         playlist.setCreator(null);
-    }
+    } */
 
-    public void addSong(Song song) {
+    /* public void addSong(Song song) {
         songs.add(song);
         song.setOwner(this);  // lie le song à cet utilisateur
     }
@@ -57,7 +68,7 @@ public class User {
     public void removeSong(Song song) {
         songs.remove(song);
         song.setOwner(null);
-    }
+    } */
 
     // ----- toString (utile pour les logs) -----
     @Override
@@ -65,8 +76,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", playlists=" + playlists.size() +
-                ", songs=" + songs.size() +
                 '}';
     }
 

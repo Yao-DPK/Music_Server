@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "playlists")
+@Table(name = "playlist")
 public class Playlist {
 
     @Id
@@ -15,7 +15,7 @@ public class Playlist {
     private String title;
 
     // Plusieurs playlists peuvent appartenir à un même utilisateur
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")  // Clé étrangère vers User
     private User creator;
 
@@ -31,9 +31,10 @@ public class Playlist {
         this.title = title;
     }
 
-    public Playlist(Long id, String title) {
-        this.id = id;
+    public Playlist(String title, User creator) {
         this.title = title;
+        this.creator = creator;
+
     }
 
     // ----- Getters & Setters -----

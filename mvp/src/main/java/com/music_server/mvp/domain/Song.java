@@ -3,7 +3,7 @@ package com.music_server.mvp.domain;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "songs")
+@Table(name = "song")
 public class Song {
 
     @Id
@@ -13,8 +13,8 @@ public class Song {
     private String title;
 
     // Plusieurs chansons peuvent appartenir à un même utilisateur
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false) // clé étrangère
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "user_id") // clé étrangère
     private User owner;
 
     // ----- Constructors -----
@@ -26,9 +26,19 @@ public class Song {
         this.title = title;
     }
 
-    public Song(Long id, String title) {
+    
+
+    
+
+    public Song(String title, User owner) {
+        this.title = title;
+        this.owner = owner;
+    }
+
+    public Song(Long id, String title, User owner) {
         this.id = id;
         this.title = title;
+        this.owner = owner;
     }
 
     // ----- Getters & Setters -----

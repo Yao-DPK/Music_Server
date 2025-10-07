@@ -1,8 +1,11 @@
-/* package com.music_server.mvp.repository;
+package com.music_server.mvp.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import com.music_server.mvp.model.Playlist;
+import com.music_server.mvp.domain.Playlist;
 
-public interface PlaylistRepository extends JpaRepository<Playlist, Long>{}
- */
+@Repository
+public interface PlaylistRepository extends JpaRepository<Playlist, Long>{
+    
+}

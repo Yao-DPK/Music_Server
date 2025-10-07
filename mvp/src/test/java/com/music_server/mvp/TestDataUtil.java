@@ -12,21 +12,16 @@ public final class TestDataUtil {
 
     }
 
-    public static Song createTestSong(String title){
-        return  new Song(title);
+    public static Song createTestSong(String title, User user){
+        return  new Song(title, user);
     }
 
     public static User createTestUser(String username, String password){
         return new User(username, password);
     }
 
-    public static Playlist createTestPlaylist(String title){
-        return new Playlist(title);
+    public static Playlist createTestPlaylist(String title, User user){
+        return new Playlist(title, user);
     }
 
-    public static PlaylistItem createTestPlaylistItem(Long playlist_id, Long song_id){
-        return new PlaylistItem(playlist_id, song_id);
-    }
-
-    
 }
