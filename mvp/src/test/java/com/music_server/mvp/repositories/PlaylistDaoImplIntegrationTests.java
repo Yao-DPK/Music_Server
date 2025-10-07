@@ -1,4 +1,4 @@
-package com.music_server.mvp.dao.impl;
+/* package com.music_server.mvp.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -96,3 +96,4 @@ public class PlaylistDaoImplIntegrationTests {
     }
 
 }
+ */

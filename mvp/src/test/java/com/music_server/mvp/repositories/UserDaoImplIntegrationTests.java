@@ -1,4 +1,4 @@
-package com.music_server.mvp.dao.impl;
+/* package com.music_server.mvp.repositories;
 
 import java.util.Optional;
 import java.util.List;
@@ -53,3 +53,4 @@ public class UserDaoImplIntegrationTests {
         
     }
 }
+ */

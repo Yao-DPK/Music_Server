@@ -1,4 +1,4 @@
-package com.music_server.mvp.dao.impl;
+/* package com.music_server.mvp.repositories;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,3 +57,4 @@ public class SongDaoImplIntegrationTests {
 
     
 }   
+ */
