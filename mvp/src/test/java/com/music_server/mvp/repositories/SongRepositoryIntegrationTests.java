@@ -8,10 +8,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.music_server.mvp.TestDataUtil;
-import com.music_server.mvp.domain.Song;
-import com.music_server.mvp.domain.User;
-import com.music_server.mvp.repository.SongRepository;
-import com.music_server.mvp.repository.UserRepository;
+import com.music_server.mvp.domain.entities.SongEntity;
+import com.music_server.mvp.domain.entities.UserEntity;
+import com.music_server.mvp.repositories.SongRepository;
+import com.music_server.mvp.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -35,13 +35,13 @@ public class SongRepositoryIntegrationTests {
     // CREATE + READ (single)
     @Test
     public void TestThatSongCanBeCreatedAndRecalled() {
-        User user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
+        UserEntity user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
 
-        Song song = TestDataUtil.createTestSong("Sonic.mp3", user);
+        SongEntity song = TestDataUtil.createTestSong("Sonic.mp3", user);
         song.setOwner(user);
         test_song.save(song);
 
-        Optional<Song> result = test_song.findById(song.getId());
+        Optional<SongEntity> result = test_song.findById(song.getId());
 
         assertThat(result).isPresent();
         assertThat(result.get().getTitle()).isEqualTo("Sonic.mp3");
@@ -51,34 +51,34 @@ public class SongRepositoryIntegrationTests {
     // CREATE + READ (multiple)
     @Test
     public void MultipleSongCreationAndReadTest() {
-        User user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
+        UserEntity user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
 
-        Song song1 = TestDataUtil.createTestSong("Sonic.mp3", user);
-        Song song2 = TestDataUtil.createTestSong("Mario.mp3", user);
-        Song song3 = TestDataUtil.createTestSong("Marios.mp3", user);
+        SongEntity song1 = TestDataUtil.createTestSong("Sonic.mp3", user);
+        SongEntity song2 = TestDataUtil.createTestSong("Mario.mp3", user);
+        SongEntity song3 = TestDataUtil.createTestSong("Marios.mp3", user);
 
         test_song.save(song1);
         test_song.save(song2);
         test_song.save(song3);
 
-        List<Song> results = test_song.findAll();
+        List<SongEntity> results = test_song.findAll();
 
         assertThat(results).hasSize(3);
         assertThat(results)
-            .extracting(Song::getTitle)
+            .extracting(SongEntity::getTitle)
             .containsExactlyInAnyOrder("Sonic.mp3", "Mario.mp3", "Marios.mp3");
     }
 
     // UPDATE
     @Test
     public void TestThatSongCanBeUpdated() {
-        User user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
-        Song song = test_song.save(TestDataUtil.createTestSong("OldTitle.mp3", user));
+        UserEntity user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
+        SongEntity song = test_song.save(TestDataUtil.createTestSong("OldTitle.mp3", user));
 
         song.setTitle("NewTitle.mp3");
         test_song.save(song); // Hibernate = merge()
 
-        Optional<Song> result = test_song.findById(song.getId());
+        Optional<SongEntity> result = test_song.findById(song.getId());
 
         assertThat(result).isPresent();
         assertThat(result.get().getTitle()).isEqualTo("NewTitle.mp3");
@@ -87,29 +87,29 @@ public class SongRepositoryIntegrationTests {
     // DELETE single
     @Test
     public void TestThatSongCanBeDeleted() {
-        User user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
-        Song song = test_song.save(TestDataUtil.createTestSong("DeleteMe.mp3", user));
+        UserEntity user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
+        SongEntity song = test_song.save(TestDataUtil.createTestSong("DeleteMe.mp3", user));
 
         test_song.delete(song);
 
-        Optional<Song> result = test_song.findById(song.getId());
+        Optional<SongEntity> result = test_song.findById(song.getId());
         assertThat(result).isEmpty();
     }
 
     // DELETE all
     @Test
     public void TestThatAllSongsCanBeDeleted() {
-        User user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
+        UserEntity user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
 
-        Song song1 = TestDataUtil.createTestSong("Track1.mp3", user);
-        Song song2 = TestDataUtil.createTestSong("Track2.mp3", user);
+        SongEntity song1 = TestDataUtil.createTestSong("Track1.mp3", user);
+        SongEntity song2 = TestDataUtil.createTestSong("Track2.mp3", user);
 
         test_song.save(song1);
         test_song.save(song2);
 
         test_song.deleteAll();
 
-        List<Song> results = test_song.findAll();
+        List<SongEntity> results = test_song.findAll();
         assertThat(results).isEmpty();
     }
 }

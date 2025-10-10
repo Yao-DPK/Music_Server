@@ -1,12 +1,12 @@
-package com.music_server.mvp.domain;
+package com.music_server.mvp.domain.entities;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "playlist")
-public class Playlist {
+@Table(name = "playlists")
+public class PlaylistEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,24 +17,23 @@ public class Playlist {
     // Plusieurs playlists peuvent appartenir à un même utilisateur
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")  // Clé étrangère vers User
-    private User creator;
+    private UserEntity creator;
 
     // Une playlist contient plusieurs items
     @OneToMany(mappedBy = "playlist", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("position ASC")
-    private List<PlaylistItem> items = new ArrayList<>();
+    private List<PlaylistItemEntity> items = new ArrayList<>();
 
     // ----- Constructors -----
-    public Playlist() {}
+    public PlaylistEntity() {}
 
-    public Playlist(String title) {
+    public PlaylistEntity(String title) {
         this.title = title;
     }
 
-    public Playlist(String title, User creator) {
+    public PlaylistEntity(String title, UserEntity creator) {
         this.title = title;
         this.creator = creator;
-
     }
 
     // ----- Getters & Setters -----
@@ -44,32 +43,32 @@ public class Playlist {
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
-    public User getCreator() { return creator; }
-    public void setCreator(User creator) { this.creator = creator; }
+    public UserEntity getCreator() { return creator; }
+    public void setCreator(UserEntity creator) { this.creator = creator; }
 
-    public List<PlaylistItem> getItems() { return items; }
-    public void setItems(List<PlaylistItem> items) { this.items = items; }
+    public List<PlaylistItemEntity> getItems() { return items; }
+    public void setItems(List<PlaylistItemEntity> items) { this.items = items; }
 
     // ----- Utility Methods -----
-    public void addItem(PlaylistItem item) {
+    public void addItem(PlaylistItemEntity item) {
         items.add(item);
         item.setPlaylist(this);
     }
 
-    public void removeItem(PlaylistItem item) {
+    public void removeItem(PlaylistItemEntity item) {
         items.remove(item);
         item.setPlaylist(null);
     }
 
-    public void addSong(Song song) {
-        PlaylistItem item = new PlaylistItem();
+    public void addSong(SongEntity song) {
+        PlaylistItemEntity item = new PlaylistItemEntity();
         item.setSong(song);
         item.setPlaylist(this);
         item.setPosition(items.size() + 1);
         items.add(item);
     }
 
-    public void removeSong(Song song) {
+    public void removeSong(SongEntity song) {
         items.removeIf(item -> {
             if (item.getSong().equals(song)) {
                 item.setPlaylist(null);
@@ -83,7 +82,7 @@ public class Playlist {
     // ----- toString -----
     @Override
     public String toString() {
-        return "Playlist{" +
+        return "PlaylistEntity{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", items=" + items.size() +
@@ -94,8 +93,8 @@ public class Playlist {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Playlist)) return false;
-        Playlist playlist = (Playlist) o;
+        if (!(o instanceof PlaylistEntity)) return false;
+        PlaylistEntity playlist = (PlaylistEntity) o;
         return id != null && id.equals(playlist.id);
     }
 

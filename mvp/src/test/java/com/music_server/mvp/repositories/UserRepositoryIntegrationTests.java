@@ -11,8 +11,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.music_server.mvp.TestDataUtil;
-import com.music_server.mvp.domain.User;
-import com.music_server.mvp.repository.UserRepository;
+import com.music_server.mvp.domain.entities.UserEntity;
+import com.music_server.mvp.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -30,10 +30,10 @@ public class UserRepositoryIntegrationTests {
     // CREATE + READ (Single)
     @Test
     public void TestCreateUserAndReadIt() {
-        User user = TestDataUtil.createTestUser("Pyke", "Pyke");
+        UserEntity user = TestDataUtil.createTestUser("Pyke", "Pyke");
         test_user.save(user);
 
-        Optional<User> result = test_user.findById(user.getId());
+        Optional<UserEntity> result = test_user.findById(user.getId());
 
         assertThat(result).isPresent();
         assertThat(result.get().getUsername()).isEqualTo("Pyke");
@@ -43,23 +43,23 @@ public class UserRepositoryIntegrationTests {
     // CREATE + READ (Multiple)
     @Test
     public void TestMultipleUsersCreationAndRead() {
-        User user1 = TestDataUtil.createTestUser("Kyde", "Kyde");
-        User user2 = TestDataUtil.createTestUser("Pyke", "Pyke");
+        UserEntity user1 = TestDataUtil.createTestUser("Kyde", "Kyde");
+        UserEntity user2 = TestDataUtil.createTestUser("Pyke", "Pyke");
 
         test_user.save(user1);
         test_user.save(user2);
 
-        List<User> results = test_user.findAll();
+        List<UserEntity> results = test_user.findAll();
 
         assertThat(results).hasSize(2);
-        assertThat(results).extracting(User::getUsername)
+        assertThat(results).extracting(UserEntity::getUsername)
                            .containsExactlyInAnyOrder("Kyde", "Pyke");
     }
 
     // UPDATE
     @Test
     public void TestUpdateUser() {
-        User user = TestDataUtil.createTestUser("OldName", "OldPass");
+        UserEntity user = TestDataUtil.createTestUser("OldName", "OldPass");
         test_user.save(user);
 
         // Simuler une mise à jour
@@ -67,7 +67,7 @@ public class UserRepositoryIntegrationTests {
         user.setPassword("NewPass");
         test_user.save(user); // save() agit comme merge() si l'id existe déjà
 
-        Optional<User> updated = test_user.findById(user.getId());
+        Optional<UserEntity> updated = test_user.findById(user.getId());
         assertThat(updated).isPresent();
         assertThat(updated.get().getUsername()).isEqualTo("NewName");
         assertThat(updated.get().getPassword()).isEqualTo("NewPass");
@@ -76,27 +76,27 @@ public class UserRepositoryIntegrationTests {
     // DELETE (Single)
     @Test
     public void TestDeleteUser() {
-        User user = TestDataUtil.createTestUser("ToDelete", "Pass");
+        UserEntity user = TestDataUtil.createTestUser("ToDelete", "Pass");
         test_user.save(user);
 
         test_user.delete(user);
 
-        Optional<User> result = test_user.findById(user.getId());
+        Optional<UserEntity> result = test_user.findById(user.getId());
         assertThat(result).isEmpty();
     }
 
     // DELETE (All)
     @Test
     public void TestDeleteAllUsers() {
-        User user1 = TestDataUtil.createTestUser("Alpha", "A");
-        User user2 = TestDataUtil.createTestUser("Beta", "B");
+        UserEntity user1 = TestDataUtil.createTestUser("Alpha", "A");
+        UserEntity user2 = TestDataUtil.createTestUser("Beta", "B");
 
         test_user.save(user1);
         test_user.save(user2);
 
         test_user.deleteAll();
 
-        List<User> results = test_user.findAll();
+        List<UserEntity> results = test_user.findAll();
         assertThat(results).isEmpty();
     }
 }

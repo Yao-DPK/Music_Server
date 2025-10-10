@@ -1,4 +1,4 @@
-package com.music_server.mvp.controller;
+package com.music_server.mvp.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

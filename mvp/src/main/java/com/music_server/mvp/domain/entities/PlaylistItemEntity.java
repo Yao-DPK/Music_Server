@@ -1,4 +1,4 @@
-package com.music_server.mvp.domain;
+package com.music_server.mvp.domain.entities;
 
 import jakarta.persistence.*;
 
@@ -9,7 +9,7 @@ import jakarta.persistence.*;
         @UniqueConstraint(columnNames = {"playlist_id", "position"}) // empêche deux chansons à la même position
     }
 )
-public class PlaylistItem {
+public class PlaylistItemEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,21 +18,21 @@ public class PlaylistItem {
     // Plusieurs items appartiennent à une même playlist
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "playlist_id", nullable = false)
-    private Playlist playlist;
+    private PlaylistEntity playlist;
 
     // Chaque item référence une seule chanson, mais une chanson peut apparaître dans plusieurs playlists
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "song_id", nullable = false)
-    private Song song;
+    private SongEntity song;
 
     // Position de la chanson dans la playlist
     @Column(nullable = false)
     private int position;
 
     // ----- Constructeurs -----
-    public PlaylistItem() {}
+    public PlaylistItemEntity() {}
 
-    public PlaylistItem(Playlist playlist, Song song, int position) {
+    public PlaylistItemEntity(PlaylistEntity playlist, SongEntity song, int position) {
         this.playlist = playlist;
         this.song = song;
         this.position = position;
@@ -43,13 +43,13 @@ public class PlaylistItem {
 
     public void setId(Long id) { this.id = id; }
 
-    public Playlist getPlaylist() { return playlist; }
+    public PlaylistEntity getPlaylist() { return playlist; }
 
-    public void setPlaylist(Playlist playlist) { this.playlist = playlist; }
+    public void setPlaylist(PlaylistEntity playlist) { this.playlist = playlist; }
 
-    public Song getSong() { return song; }
+    public SongEntity getSong() { return song; }
 
-    public void setSong(Song song) { this.song = song; }
+    public void setSong(SongEntity song) { this.song = song; }
 
     public int getPosition() { return position; }
 
@@ -59,8 +59,8 @@ public class PlaylistItem {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlaylistItem)) return false;
-        PlaylistItem other = (PlaylistItem) o;
+        if (!(o instanceof PlaylistItemEntity)) return false;
+        PlaylistItemEntity other = (PlaylistItemEntity) o;
         return id != null && id.equals(other.id);
     }
 
@@ -72,7 +72,7 @@ public class PlaylistItem {
     // ----- toString -----
     @Override
     public String toString() {
-        return "PlaylistItem{" +
+        return "PlaylistEntityItem{" +
                 "id=" + id +
                 ", position=" + position +
                 ", song=" + (song != null ? song.getTitle() : "null") +

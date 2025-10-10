@@ -1,10 +1,9 @@
 package com.music_server.mvp;
 
-import com.music_server.mvp.domain.Song;
-import com.music_server.mvp.domain.User;
-
-import com.music_server.mvp.domain.Playlist;
-import com.music_server.mvp.domain.PlaylistItem;
+import com.music_server.mvp.domain.entities.PlaylistEntity;
+import com.music_server.mvp.domain.entities.PlaylistItemEntity;
+import com.music_server.mvp.domain.entities.SongEntity;
+import com.music_server.mvp.domain.entities.UserEntity;
 
 public final class TestDataUtil {
 
@@ -12,16 +11,16 @@ public final class TestDataUtil {
 
     }
 
-    public static Song createTestSong(String title, User user){
-        return  new Song(title, user);
+    public static SongEntity createTestSong(String title, UserEntity user){
+        return  new SongEntity(title, user);
     }
 
-    public static User createTestUser(String username, String password){
-        return new User(username, password);
+    public static UserEntity createTestUser(String username, String password){
+        return new UserEntity(username, password);
     }
 
-    public static Playlist createTestPlaylist(String title, User user){
-        return new Playlist(title, user);
+    public static PlaylistEntity createTestPlaylist(String title, UserEntity user){
+        return new PlaylistEntity(title, user);
     }
 
 }

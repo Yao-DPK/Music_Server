@@ -13,12 +13,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.music_server.mvp.TestDataUtil;
-import com.music_server.mvp.domain.Playlist;
-import com.music_server.mvp.domain.Song;
-import com.music_server.mvp.domain.User;
-import com.music_server.mvp.repository.PlaylistRepository;
-import com.music_server.mvp.repository.SongRepository;
-import com.music_server.mvp.repository.UserRepository;
+import com.music_server.mvp.domain.entities.PlaylistEntity;
+import com.music_server.mvp.domain.entities.SongEntity;
+import com.music_server.mvp.domain.entities.UserEntity;
+import com.music_server.mvp.repositories.PlaylistRepository;
+import com.music_server.mvp.repositories.SongRepository;
+import com.music_server.mvp.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -40,12 +40,12 @@ public class PlaylistRepositoryIntegrationTests {
     // CREATE + READ (single)
     @Test
     public void TestPlaylistCreationAndReadIt() {
-        User user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
-        Playlist playlist = TestDataUtil.createTestPlaylist("Chill", user);
+        UserEntity user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
+        PlaylistEntity playlist = TestDataUtil.createTestPlaylist("Chill", user);
         playlist.setCreator(user);
 
         test_playlist.save(playlist);
-        Optional<Playlist> result = test_playlist.findById(playlist.getId());
+        Optional<PlaylistEntity> result = test_playlist.findById(playlist.getId());
 
         assertThat(result).isPresent();
         assertThat(result.get().getTitle()).isEqualTo("Chill");
@@ -55,34 +55,34 @@ public class PlaylistRepositoryIntegrationTests {
     // CREATE + READ (multiple)
     @Test
     public void MultiplePlaylistsCreationAndReadTest() {
-        User user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
+        UserEntity user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
 
-        Playlist playlist1 = TestDataUtil.createTestPlaylist("Silent Walks", user);
-        Playlist playlist2 = TestDataUtil.createTestPlaylist("Sport", user);
-        Playlist playlist3 = TestDataUtil.createTestPlaylist("Chill", user);
+        PlaylistEntity playlist1 = TestDataUtil.createTestPlaylist("Silent Walks", user);
+        PlaylistEntity playlist2 = TestDataUtil.createTestPlaylist("Sport", user);
+        PlaylistEntity playlist3 = TestDataUtil.createTestPlaylist("Chill", user);
 
         test_playlist.save(playlist1);
         test_playlist.save(playlist2);
         test_playlist.save(playlist3);
 
-        List<Playlist> results = test_playlist.findAll();
+        List<PlaylistEntity> results = test_playlist.findAll();
 
         assertThat(results).hasSize(3);
         assertThat(results)
-            .extracting(Playlist::getTitle)
+            .extracting(PlaylistEntity::getTitle)
             .containsExactlyInAnyOrder("Silent Walks", "Sport", "Chill");
     }
 
     // UPDATE
     @Test
     public void TestPlaylistUpdate() {
-        User user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
-        Playlist playlist = test_playlist.save(TestDataUtil.createTestPlaylist("OldTitle", user));
+        UserEntity user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
+        PlaylistEntity playlist = test_playlist.save(TestDataUtil.createTestPlaylist("OldTitle", user));
 
         playlist.setTitle("NewTitle");
         test_playlist.save(playlist);
 
-        Optional<Playlist> updated = test_playlist.findById(playlist.getId());
+        Optional<PlaylistEntity> updated = test_playlist.findById(playlist.getId());
         assertThat(updated).isPresent();
         assertThat(updated.get().getTitle()).isEqualTo("NewTitle");
     }
@@ -90,44 +90,44 @@ public class PlaylistRepositoryIntegrationTests {
     // DELETE (single)
     @Test
     public void TestPlaylistDelete() {
-        User user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
-        Playlist playlist = test_playlist.save(TestDataUtil.createTestPlaylist("ToDelete", user));
+        UserEntity user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
+        PlaylistEntity playlist = test_playlist.save(TestDataUtil.createTestPlaylist("ToDelete", user));
 
         test_playlist.delete(playlist);
 
-        Optional<Playlist> result = test_playlist.findById(playlist.getId());
+        Optional<PlaylistEntity> result = test_playlist.findById(playlist.getId());
         assertThat(result).isEmpty();
     }
 
     // DELETE (all)
     @Test
     public void TestDeleteAllPlaylists() {
-        User user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
+        UserEntity user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
 
-        Playlist playlist1 = TestDataUtil.createTestPlaylist("Playlist1", user);
-        Playlist playlist2 = TestDataUtil.createTestPlaylist("Playlist2", user);
+        PlaylistEntity playlist1 = TestDataUtil.createTestPlaylist("Playlist1", user);
+        PlaylistEntity playlist2 = TestDataUtil.createTestPlaylist("Playlist2", user);
 
         test_playlist.save(playlist1);
         test_playlist.save(playlist2);
 
         test_playlist.deleteAll();
 
-        List<Playlist> results = test_playlist.findAll();
+        List<PlaylistEntity> results = test_playlist.findAll();
         assertThat(results).isEmpty();
     }
 
     // ADD SONG TO PLAYLIST
     @Test
     public void TestAddSongToPlaylist() {
-        User user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
-        Playlist playlist = test_playlist.save(TestDataUtil.createTestPlaylist("Sport", user));
+        UserEntity user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
+        PlaylistEntity playlist = test_playlist.save(TestDataUtil.createTestPlaylist("Sport", user));
 
-        Song song = test_song.save(TestDataUtil.createTestSong("Sonic.mp3", user));
+        SongEntity song = test_song.save(TestDataUtil.createTestSong("Sonic.mp3", user));
         playlist.addSong(song);
 
         test_playlist.save(playlist);
 
-        Optional<Playlist> result = test_playlist.findById(playlist.getId());
+        Optional<PlaylistEntity> result = test_playlist.findById(playlist.getId());
         assertThat(result).isPresent();
         assertThat(result.get().getItems()).hasSize(1);
         assertThat(result.get().getItems().get(0).getSong().getTitle()).isEqualTo("Sonic.mp3");
@@ -136,11 +136,11 @@ public class PlaylistRepositoryIntegrationTests {
     // REMOVE SONG FROM PLAYLIST
     @Test
     public void TestRemoveSongFromPlaylist() {
-        User user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
-        Playlist playlist = test_playlist.save(TestDataUtil.createTestPlaylist("Chill", user));
+        UserEntity user = test_user.save(TestDataUtil.createTestUser("Pyke", "Pyke"));
+        PlaylistEntity playlist = test_playlist.save(TestDataUtil.createTestPlaylist("Chill", user));
 
-        Song song1 = test_song.save(TestDataUtil.createTestSong("Sonic.mp3", user));
-        Song song2 = test_song.save(TestDataUtil.createTestSong("Mario.mp3", user));
+        SongEntity song1 = test_song.save(TestDataUtil.createTestSong("Sonic.mp3", user));
+        SongEntity song2 = test_song.save(TestDataUtil.createTestSong("Mario.mp3", user));
 
         playlist.addSong(song1);
         playlist.addSong(song2);
@@ -150,7 +150,7 @@ public class PlaylistRepositoryIntegrationTests {
         playlist.removeSong(song1);
         test_playlist.save(playlist);
 
-        Optional<Playlist> result = test_playlist.findById(playlist.getId());
+        Optional<PlaylistEntity> result = test_playlist.findById(playlist.getId());
         assertThat(result).isPresent();
         assertThat(result.get().getItems()).hasSize(1);
         assertThat(result.get().getItems().get(0).getSong().getTitle()).isEqualTo("Mario.mp3");
