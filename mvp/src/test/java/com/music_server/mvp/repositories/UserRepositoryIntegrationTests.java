@@ -59,24 +59,24 @@ public class UserRepositoryIntegrationTests {
     // UPDATE
     @Test
     public void TestUpdateUser() {
-        UserEntity user = TestDataUtil.createTestUser("OldName", "OldPass");
+        UserEntity user = TestDataUtil.createTestUser("Kyle", "Killed");
         test_user.save(user);
 
         // Simuler une mise à jour
-        user.setUsername("NewName");
-        user.setPassword("NewPass");
+        user.setUsername("Pyke");
+        user.setPassword("Kyde");
         test_user.save(user); // save() agit comme merge() si l'id existe déjà
 
         Optional<UserEntity> updated = test_user.findById(user.getId());
         assertThat(updated).isPresent();
-        assertThat(updated.get().getUsername()).isEqualTo("NewName");
-        assertThat(updated.get().getPassword()).isEqualTo("NewPass");
+        assertThat(updated.get().getUsername()).isEqualTo("Pyke");
+        assertThat(updated.get().getPassword()).isEqualTo("Kyde");
     }
 
     // DELETE (Single)
     @Test
     public void TestDeleteUser() {
-        UserEntity user = TestDataUtil.createTestUser("ToDelete", "Pass");
+        UserEntity user = TestDataUtil.createTestUser("Skeelled", "Swordsmanship is Dead");
         test_user.save(user);
 
         test_user.delete(user);
@@ -88,8 +88,8 @@ public class UserRepositoryIntegrationTests {
     // DELETE (All)
     @Test
     public void TestDeleteAllUsers() {
-        UserEntity user1 = TestDataUtil.createTestUser("Alpha", "A");
-        UserEntity user2 = TestDataUtil.createTestUser("Beta", "B");
+        UserEntity user1 = TestDataUtil.createTestUser("Eliane", "Budget Sérré");
+        UserEntity user2 = TestDataUtil.createTestUser("Elephant", "Gun");
 
         test_user.save(user1);
         test_user.save(user2);

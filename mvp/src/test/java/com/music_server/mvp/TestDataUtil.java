@@ -23,4 +23,18 @@ public final class TestDataUtil {
         return new PlaylistEntity(title, user);
     }
 
+
+    public static SongEntity createTestSongDto(String title, UserEntity user){
+        return  new SongEntity(title, user);
+    }
+
+    public static UserEntity createTestUserDto(String username, String password){
+        return new UserEntity(username, password);
+    }
+
+    public static PlaylistEntity createTestPlaylistDto(String title, UserEntity user){
+        return new PlaylistEntity(title, user);
+    }
+
+
 }
