@@ -32,7 +32,7 @@ public class ErrorController {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ApiErrorResponse> handleRuntimeExcpetion(IllegalArgumentException ex){
+    public ResponseEntity<ApiErrorResponse> handleRuntimeExcpetion(RuntimeException ex){
         ApiErrorResponse error = new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }

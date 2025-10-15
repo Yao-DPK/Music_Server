@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-
 public class MusicUserDetails implements UserDetails{
 
     private final UserEntity userEntity;
@@ -26,6 +25,8 @@ public class MusicUserDetails implements UserDetails{
         this.userEntity = userEntity;
     }
 
+    
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));

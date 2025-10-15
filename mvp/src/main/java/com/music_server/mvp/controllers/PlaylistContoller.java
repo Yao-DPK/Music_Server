@@ -1,6 +1,5 @@
 package com.music_server.mvp.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,41 +22,39 @@ import com.music_server.mvp.domain.entities.SongEntity;
 import com.music_server.mvp.domain.entities.UserEntity;
 import com.music_server.mvp.mappers.Mapper;
 import com.music_server.mvp.security.MusicUserDetails;
+import com.music_server.mvp.services.PlaylistService;
 import com.music_server.mvp.services.SongService;
-import com.music_server.mvp.services.UserService;
 
 @RestController
-@RequestMapping(path = "/api/v1/songs")
-public class SongController {
+@RequestMapping(path = "/api/v1/playlists")
+public class PlaylistContoller {
     
-    private SongService songService;
-
-    private Mapper<UserEntity, UserDto> userMapper;
-
-    private Mapper<SongEntity, SongDto> songMapper;
+    private PlaylistService playlistService;
 
     private Mapper<PlaylistEntity, PlaylistDto> playlistMapper;
 
     @Autowired
-    public SongController(SongService songService, Mapper<SongEntity, SongDto> songMapper){
-        this.songService = songService;
-        this.songMapper = songMapper;
+    public PlaylistContoller(PlaylistService playlistService, Mapper<PlaylistEntity, PlaylistDto> playlistMapper){
+        this.playlistService = playlistService;
+        this.playlistMapper = playlistMapper;   
     }
+    
 
     @PostMapping(path = "/me")
-    public ResponseEntity uploadSong(@AuthenticationPrincipal MusicUserDetails userDetails, @RequestBody SongDto songDto){
+    public ResponseEntity createPlaylist(@AuthenticationPrincipal MusicUserDetails userDetails, @RequestBody PlaylistDto playlistDto){
 
-        SongEntity songEntity = songMapper.mapFrom(songDto);
-        UserEntity ownerReference = new UserEntity();
-        ownerReference.setId(userDetails.getId()); // juste l'id
-        songEntity.setOwner(ownerReference);
-        SongEntity savedSong = songService.create(songEntity);
-        return new ResponseEntity<>(songMapper.mapTo(savedSong), HttpStatus.CREATED);
+        PlaylistEntity playlistEntity = playlistMapper.mapFrom(playlistDto);
+        UserEntity creatorReference = new UserEntity();
+        creatorReference.setId(userDetails.getId()); // juste l'id
+        playlistEntity.setCreator(creatorReference);
+        PlaylistEntity savedPlaylist = playlistService.create(playlistEntity);
+        return new ResponseEntity<>(playlistMapper.mapTo(savedPlaylist), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/me")
-    public ResponseEntity<List<SongDto>> getUsersSongs(@AuthenticationPrincipal MusicUserDetails userDetails){
-        List<SongEntity> songs = songService.findUsersSongsById(userDetails.getId());
-        return new ResponseEntity<>(songs.stream().map(songMapper::mapTo).collect(Collectors.toList()), HttpStatus.OK);
+    public ResponseEntity<List<PlaylistDto>> getUsersPlaylists(@AuthenticationPrincipal MusicUserDetails userDetails){
+        List<PlaylistEntity> playlists = playlistService.findUsersPlaylistsById(userDetails.getId());
+        return new ResponseEntity<>(playlists.stream().map(playlistMapper::mapTo).collect(Collectors.toList()), HttpStatus.OK);
     }
 }
+

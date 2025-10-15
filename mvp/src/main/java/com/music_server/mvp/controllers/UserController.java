@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,6 +26,7 @@ import com.music_server.mvp.domain.entities.PlaylistEntity;
 import com.music_server.mvp.domain.entities.SongEntity;
 import com.music_server.mvp.domain.entities.UserEntity;
 import com.music_server.mvp.mappers.Mapper;
+import com.music_server.mvp.security.MusicUserDetails;
 import com.music_server.mvp.services.UserService;
 
 @RestController
@@ -47,6 +49,8 @@ public class UserController {
         this.songMapper = songMapper;
         this.playlistMapper = playlistMapper;   
     }
+
+
     @PostMapping
     public ResponseEntity<UserDto> create(@RequestBody  UserDto user){
         UserEntity userEntity = userMapper.mapFrom(user);
@@ -111,36 +115,4 @@ public class UserController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
 
     }
-
-   /*  @PostMapping(path= "/{id}/songs")
-    public ResponseEntity uploadSong(@PathVariable("id") Long id, @RequestBody SongDto songDto){
-
-        SongEntity songEntity = songMapper.mapFrom(songDto);
-        SongEntity savedSong = 
-
-
-    }
-
-    @GetMapping(path = "/{id}/songs")
-    public ResponseEntity<List<SongDto>> getUsersSongs(@PathVariable("id") Long id){
-        List<SongDto> songs = new ArrayList<>();
-        songs.add(new SongDto("Sonic.mp3", id));
-        return new ResponseEntity<>(songs, HttpStatus.OK);
-    }
-    
-    @PostMapping(path = "/{id}/playlists")
-    public ResponseEntity createPlaylist(@PathVariable("id") Long id, @RequestBody PlaylistDto playlistDto){
-        PlaylistDto playlistDto2 = playlistDto;
-        return new ResponseEntity<>(playlistDto2, HttpStatus.OK);
-    }
-
-    @GetMapping(path = "/{id}/playlists")
-    public ResponseEntity<List<PlaylistDto>> getUsersPlaylists(@PathVariable("id") Long id){
-        List<PlaylistDto> playlists = new ArrayList<>();
-        playlists.add(new PlaylistDto("Sport", id));
-        playlists.add(new PlaylistDto("Chill", id));
-
-        return new ResponseEntity<>(playlists, HttpStatus.OK);
-    }
-     */
 }

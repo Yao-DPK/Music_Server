@@ -20,6 +20,9 @@ public class SongDto {
     }
 
 
+    public SongDto(String title) {
+        this.title = title;
+    }
 
     public SongDto(Long id, String title, UserDto owner) {
         this.id = id;
