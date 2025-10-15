@@ -2,6 +2,8 @@ package com.music_server.mvp.domain.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +15,7 @@ public class UserEntity {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
+    @JsonIgnore
     private String password;
 
     // ----- Constructors -----

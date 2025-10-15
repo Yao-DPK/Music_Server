@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.music_server.mvp.domain.dto.PlaylistDto;
 import com.music_server.mvp.domain.dto.SongDto;
 import com.music_server.mvp.domain.dto.UserDto;
+import com.music_server.mvp.domain.entities.PlaylistEntity;
+import com.music_server.mvp.domain.entities.SongEntity;
 import com.music_server.mvp.domain.entities.UserEntity;
 import com.music_server.mvp.mappers.Mapper;
 import com.music_server.mvp.services.UserService;
@@ -29,20 +31,30 @@ import com.music_server.mvp.services.UserService;
 @RequestMapping(path = "/api/v1/users")
 public class UserController {
 
-    @Autowired
+    
     private UserService userService;
 
-    @Autowired
     private Mapper<UserEntity, UserDto> userMapper;
 
-    @PostMapping(path = "/")
+    private Mapper<SongEntity, SongDto> songMapper;
+
+    private Mapper<PlaylistEntity, PlaylistDto> playlistMapper;
+
+    @Autowired
+    public UserController(UserService userService, Mapper<UserEntity, UserDto> userMapper, Mapper<SongEntity, SongDto> songMapper, Mapper<PlaylistEntity, PlaylistDto> playlistMapper){
+        this.userService = userService;
+        this.userMapper = userMapper;
+        this.songMapper = songMapper;
+        this.playlistMapper = playlistMapper;   
+    }
+    @PostMapping
     public ResponseEntity<UserDto> create(@RequestBody  UserDto user){
         UserEntity userEntity = userMapper.mapFrom(user);
         UserEntity savedUserEntity = userService.create(userEntity);
         return new ResponseEntity<>(userMapper.mapTo(savedUserEntity), HttpStatus.CREATED);
     } 
 
-    @GetMapping(path = "/")
+    @GetMapping
     public ResponseEntity<List<UserDto>> findAll(){
         List<UserEntity> users = userService.findAll();
         return new ResponseEntity<>(users.stream().map(userMapper::mapTo).collect(Collectors.toList()), HttpStatus.OK);
@@ -99,11 +111,14 @@ public class UserController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
 
     }
-/* 
-    @PostMapping(path= "/{id}/songs")
+
+   /*  @PostMapping(path= "/{id}/songs")
     public ResponseEntity uploadSong(@PathVariable("id") Long id, @RequestBody SongDto songDto){
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        SongEntity songEntity = songMapper.mapFrom(songDto);
+        SongEntity savedSong = 
+
+
     }
 
     @GetMapping(path = "/{id}/songs")
@@ -126,6 +141,6 @@ public class UserController {
         playlists.add(new PlaylistDto("Chill", id));
 
         return new ResponseEntity<>(playlists, HttpStatus.OK);
-    } */
-    
+    }
+     */
 }
