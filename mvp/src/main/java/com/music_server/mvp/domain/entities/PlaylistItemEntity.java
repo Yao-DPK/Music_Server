@@ -38,6 +38,10 @@ public class PlaylistItemEntity {
         this.position = position;
     }
 
+    public PlaylistItemEntity(SongEntity song) {
+        this.song = song;
+    }
+
     // ----- Getters / Setters -----
     public Long getId() { return id; }
 

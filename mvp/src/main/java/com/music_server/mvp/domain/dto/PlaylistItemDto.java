@@ -5,17 +5,20 @@ public class PlaylistItemDto {
 
     private String title;
 
-    private Long playlist_id;
+    private PlaylistDto playlist;
 
-    private Long song_id;
+    private SongDto song;
+    
+    private int position;
 
     
 
-    public PlaylistItemDto(Long id, String title, Long playlist_id, Long song_id) {
+    public PlaylistItemDto(Long id, String title, PlaylistDto playlist, SongDto song, int position) {
         this.id = id;
         this.title = title;
-        this.playlist_id = playlist_id;
-        this.song_id = song_id;
+        this.playlist = playlist;
+        this.song = song;
+        this.position = position;
     }
 
     public PlaylistItemDto() {
@@ -37,20 +40,20 @@ public class PlaylistItemDto {
         this.title = title;
     }
 
-    public Long getPlaylist_id() {
-        return playlist_id;
+    public PlaylistDto getPlaylist() {
+        return playlist;
     }
 
-    public void setPlaylist_id(Long playlist_id) {
-        this.playlist_id = playlist_id;
+    public void setPlaylist(PlaylistDto playlist) {
+        this.playlist = playlist;
     }
 
-    public Long getSong_id() {
-        return song_id;
+    public SongDto getSong() {
+        return song;
     }
 
-    public void setSong_id(Long song_id) {
-        this.song_id = song_id;
+    public void setSong(SongDto song) {
+        this.song = song;
     }
 
     

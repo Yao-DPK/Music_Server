@@ -1,19 +1,30 @@
 package com.music_server.mvp.domain.dto;
 
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+
+
+
 public class SongDto {
     private Long id;
 
     private String title;
 
-    private Long user_id;
+    private UserDto owner;
 
     public SongDto() {
     }
 
-    public SongDto(Long id, String title, Long user_id) {
+    public SongDto(String title, UserDto owner) {
+        this.title = title;
+        this.owner = owner;
+    }
+
+
+
+    public SongDto(Long id, String title, UserDto owner) {
         this.id = id;
         this.title = title;
-        this.user_id = user_id;
+        this. owner = owner;
     }
 
     public Long getId() {
@@ -32,12 +43,12 @@ public class SongDto {
         this.title = title;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public UserDto getOwner() {
+        return owner;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setOwner(UserDto owner) {
+        this. owner = owner;
     }
 
     

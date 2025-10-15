@@ -6,19 +6,12 @@ import java.util.Optional;
 import com.music_server.mvp.domain.dto.UserDto;
 import com.music_server.mvp.domain.entities.UserEntity;
 
-public interface UserService {
-    UserEntity create(UserEntity user);
+public interface UserService extends GenericService<UserEntity, Long> {
 
-    List<UserEntity> findAll();
+    UserEntity fullUpdate(Long id, UserEntity entity);
 
-    Optional<UserEntity> findById(Long id);
+    UserEntity partialUpdate(Long id, UserEntity entity);
 
-    boolean existById(Long id);
-
-    UserEntity fullUpdate(Long id, UserEntity userEntity);
-
-    UserEntity partialUpdate(Long id, UserEntity userEntity);
-    
-    void delete(Long id);
+    boolean existsByUsername(String username);
     
 }

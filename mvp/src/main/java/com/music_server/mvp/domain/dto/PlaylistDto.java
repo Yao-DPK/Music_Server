@@ -26,6 +26,13 @@ public class PlaylistDto {
         this.items = items;
     }
 
+    
+
+    public PlaylistDto(String title, UserDto creator) {
+        this.title = title;
+        this.creator = creator;
+    }
+
 
 
     public Long getId() {
