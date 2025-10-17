@@ -26,6 +26,8 @@ import com.music_server.mvp.security.MusicUserDetails;
 import com.music_server.mvp.services.SongService;
 import com.music_server.mvp.services.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/api/v1/songs")
 public class SongController {
@@ -45,7 +47,7 @@ public class SongController {
     }
 
     @PostMapping(path = "/me")
-    public ResponseEntity uploadSong(@AuthenticationPrincipal MusicUserDetails userDetails, @RequestBody SongDto songDto){
+    public ResponseEntity uploadSong(@AuthenticationPrincipal MusicUserDetails userDetails, @Valid @RequestBody SongDto songDto){
 
         SongEntity songEntity = songMapper.mapFrom(songDto);
         UserEntity ownerReference = new UserEntity();

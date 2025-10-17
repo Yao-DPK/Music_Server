@@ -2,11 +2,15 @@ package com.music_server.mvp.domain.dto;
 
 import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 
 
 public class SongDto {
     private Long id;
 
+    @NotBlank(message = "Song title is required")
     private String title;
 
     private UserDto owner;

@@ -2,22 +2,21 @@ package com.music_server.mvp.domain.dto;
 
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class PlaylistDto {
     private Long id;
 
+    @NotBlank(message = " Playlist title is required")
     private String title;
 
     private UserDto creator;
 
     private List<PlaylistItemDto> items;
 
-    
-
 
     public PlaylistDto() {
     }
-
-    
 
     public PlaylistDto(Long id, String title, UserDto creator, List<PlaylistItemDto> items) {
         this.id = id;
@@ -32,13 +31,9 @@ public class PlaylistDto {
         this.creator = creator;
     }
 
-    
-
-
     public PlaylistDto(String title) {
         this.title = title;
     }
-
 
 
     public Long getId() {

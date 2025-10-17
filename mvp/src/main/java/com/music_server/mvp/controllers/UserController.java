@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -50,17 +52,9 @@ public class UserController {
         this.playlistMapper = playlistMapper;   
     }
 
-
-    @PostMapping
-    public ResponseEntity<UserDto> create(@RequestBody  UserDto user){
-        UserEntity userEntity = userMapper.mapFrom(user);
-        UserEntity savedUserEntity = userService.create(userEntity);
-        return new ResponseEntity<>(userMapper.mapTo(savedUserEntity), HttpStatus.CREATED);
-    } 
-
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll(){
-        List<UserEntity> users = userService.findAll();
+    public ResponseEntity<List<UserDto>> findAll(Pageable pageable){
+        Page<UserEntity> users = userService.findAll(pageable);
         return new ResponseEntity<>(users.stream().map(userMapper::mapTo).collect(Collectors.toList()), HttpStatus.OK);
     }
 

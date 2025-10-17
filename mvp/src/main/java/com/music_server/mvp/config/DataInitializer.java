@@ -11,7 +11,7 @@ import com.music_server.mvp.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Component
+/* @Component
 public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
@@ -30,4 +30,4 @@ public class DataInitializer implements CommandLineRunner {
             return userRepository.save(user);
         });
     }
-}
+} */

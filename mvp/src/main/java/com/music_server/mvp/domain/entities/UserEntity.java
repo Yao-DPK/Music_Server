@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
@@ -14,8 +15,14 @@ public class UserEntity {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @NotBlank(message = "Username can't be blank")
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
+
     @JsonIgnore
+    @NotBlank(message = "Password can\'t be blank")
+    @Column(nullable = false)
     private String password;
 
     // ----- Constructors -----

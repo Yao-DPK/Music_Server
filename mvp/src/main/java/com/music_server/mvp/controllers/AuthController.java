@@ -14,27 +14,31 @@ import com.music_server.mvp.domain.dto.LoginRequest;
 import com.music_server.mvp.domain.dto.RegisterRequest;
 import com.music_server.mvp.services.AuthService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/api/v1/auth")
 public class AuthController {
 
     private final AuthService authService;
 
+
+    @Autowired
     public AuthController(AuthService authService){
         this.authService = authService;
     }
 
     @PostMapping(path = "/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest){
         UserDetails userDetails = authService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
         String tokenValue = authService.generateToken(userDetails);
         AuthResponse authResponse = new AuthResponse(tokenValue, 86400);
 
-        return ResponseEntity.ok(authResponse);
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
     @PostMapping(path = "/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest registerRequest){
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody LoginRequest registerRequest){
         authService.register(registerRequest.getUsername(), registerRequest.getPassword());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

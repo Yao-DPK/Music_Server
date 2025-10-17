@@ -1,141 +1,195 @@
 package com.music_server.mvp.controllers;
 
-import org.springframework.http.MediaType;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.music_server.mvp.TestDataUtil;
+import com.music_server.mvp.domain.entities.UserEntity;
+import com.music_server.mvp.services.UserService;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.assertj.MockMvcTester.MockMvcRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.music_server.mvp.TestDataUtil;
-import com.music_server.mvp.domain.entities.UserEntity;
-import com.music_server.mvp.services.UserService;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
+@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserControllerIntegrationTests {
-    
-    @Autowired
-    private MockMvc mockMvc;
+
+    private final MockMvc mockMvc;
+    private final ObjectMapper objectMapper;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private String jwtToken;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    public UserControllerIntegrationTests(
+            MockMvc mockMvc,
+            ObjectMapper objectMapper,
+            UserService userService,
+            PasswordEncoder passwordEncoder) {
+        this.mockMvc = mockMvc;
+        this.objectMapper = objectMapper;
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    @Autowired
-    private UserService userService;
+    @BeforeEach
+    void setUp() throws Exception {
+        // 1️⃣ Create test user
+        UserEntity user = TestDataUtil.createTestUser("Pyke", passwordEncoder.encode("Pyke"));
+        userService.create(user);
+
+        // 2️⃣ Authenticate to get JWT
+        String loginJson = """
+        {
+            "username": "Pyke",
+            "password": "Pyke"
+        }
+        """;
+
+        String response = mockMvc.perform(
+                        MockMvcRequestBuilders.post("/api/v1/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(loginJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        // 3️⃣ Extract token
+        JsonNode jsonNode = objectMapper.readTree(response);
+        jwtToken = jsonNode.get("token").asText();
+    }
+
+    // ==========================
+    // 1. CRUD TESTS
+    // ==========================
 
     @Test
-    public void testUserCreation_ShoudReturn201CreatedAndSavedUser() throws Exception{
-        UserEntity user = TestDataUtil.createTestUser("Pyke", "Pyke");
-        String userJson = objectMapper.writeValueAsString(user);
-
+    void testUserCreation_ShouldReturn201RegisterUser() throws Exception {
+        String userJson = """
+            {
+                "username":"Kyde",
+                "password":"Kyde"
+            }
+        
+        """;
 
         mockMvc.perform(
-            MockMvcRequestBuilders.post("/users")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(userJson)
-        ).andExpect(
-            MockMvcResultMatchers.status().isCreated()
-
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.id").isNumber()
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.username").value("Pyke")
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.password").value("Pyke")
-        );
+                        MockMvcRequestBuilders.post("/api/v1/auth/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(userJson))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
-    public void testReadAll_ShouldReturn200Ok() throws Exception{
+    void testReadAll_ShouldReturn200Ok() throws Exception {
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/users")
-        ).andExpect(
-            MockMvcResultMatchers.status().isOk()
-        );
+                        MockMvcRequestBuilders.get("/api/v1/users")
+                                .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    public void testReadOne_ShouldReturn200Ok() throws Exception{
-        UserEntity user = TestDataUtil.createTestUser("Pyke", "Pyke");
-       userService.create(user);
+    void testReadOne_ShouldReturn200Ok() throws Exception {
+        UserEntity user = TestDataUtil.createTestUser("Kyde", passwordEncoder.encode("Kyde"));
+        UserEntity savedUser = userService.create(user);
 
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/users/1")
-        ).andExpect(
-            MockMvcResultMatchers.status().isOk()
-        );
+                        MockMvcRequestBuilders.get("/api/v1/users/{id}", savedUser.getId())
+                                .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("Kyde"));
     }
 
     @Test
-    public void testFullUpdate_ShouldReturn200Ok() throws Exception{
+    void testFullUpdate_ShouldReturn200Ok() throws Exception {
         UserEntity userToUpdate = TestDataUtil.createTestUser("Aqua", "Lad");
-        userService.create(userToUpdate);
+        UserEntity savedUserToUpdate = userService.create(userToUpdate);
 
         UserEntity userThatUpdates = TestDataUtil.createTestUser("SuperBoy", "Prime");
-
         String userJson = objectMapper.writeValueAsString(userThatUpdates);
 
         mockMvc.perform(
-            MockMvcRequestBuilders.put("/users/1")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(userJson)
-        ).andExpect(
-            MockMvcResultMatchers.status().isOk()
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.id").value(1)
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.username").value(userThatUpdates.getUsername())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.password").value(userThatUpdates.getPassword())
-        );
-
+                        MockMvcRequestBuilders.put("/api/v1/users/{id}", savedUserToUpdate.getId())
+                                .header("Authorization", "Bearer " + jwtToken)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(userJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(savedUserToUpdate.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("SuperBoy"));
     }
 
     @Test
-    public void testPartialUpdate_ShouldReturn200Ok() throws Exception{
+    void testPartialUpdate_ShouldReturn200Ok() throws Exception {
         UserEntity userToUpdate = TestDataUtil.createTestUser("Aqua", "Lad");
-        userService.create(userToUpdate);
+        UserEntity savedUserToUpdate = userService.create(userToUpdate);
 
-        UserEntity userThatUpdates = TestDataUtil.createTestUserDto("SuperBoy", "");
-        userThatUpdates.setUsername(null);
-        String userJson = objectMapper.writeValueAsString(userThatUpdates);
+        UserEntity partialUpdate = new UserEntity();
+        partialUpdate.setUsername("SuperBoy");
+        String userJson = objectMapper.writeValueAsString(partialUpdate);
 
         mockMvc.perform(
-            MockMvcRequestBuilders.put("/users/1")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(userJson)
-        ).andExpect(
-            MockMvcResultMatchers.status().isOk()
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.id").value(1)
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.username").value(userThatUpdates.getUsername())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.password").value(userThatUpdates.getPassword())
-        );
+                        MockMvcRequestBuilders.patch("/api/v1/users/{id}", savedUserToUpdate.getId())
+                                .header("Authorization", "Bearer " + jwtToken)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(userJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(savedUserToUpdate.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("SuperBoy"));
     }
 
     @Test
-    public void testDelete_ShouldReturn204NoContent() throws Exception{
-        UserEntity userToUpdate = TestDataUtil.createTestUser("Aqua", "Lad");
-        userService.create(userToUpdate);
+    void testDelete_ShouldReturn204NoContent() throws Exception {
+        UserEntity userToDelete = TestDataUtil.createTestUser("Aqua", "Lad");
+        UserEntity savedUserToDelete = userService.create(userToDelete);
 
         mockMvc.perform(
-            MockMvcRequestBuilders.delete("/users/1")
-        ).andExpect(
-            MockMvcResultMatchers.status().isNoContent()
-        );
+                        MockMvcRequestBuilders.delete("/api/v1/users/{id}", savedUserToDelete.getId())
+                                .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    // ==========================
+    // 2. ERROR HANDLING TESTS
+    // ==========================
+
+    @Test
+    void testGetNonExistentUser_ShouldReturn404() throws Exception {
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/v1/users/{id}", 9999L)
+                                .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void testInvalidUserCreation_ShouldReturn400() throws Exception {
+        String invalidJson = """
+        {
+            "username": "",
+            "password": ""
+        }
+        """;
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/api/v1/auth/register")
+                                .header("Authorization", "Bearer " + jwtToken)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(invalidJson))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
 }

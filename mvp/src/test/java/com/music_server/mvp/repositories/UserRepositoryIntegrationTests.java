@@ -53,7 +53,7 @@ public class UserRepositoryIntegrationTests {
 
         assertThat(results).hasSize(2);
         assertThat(results).extracting(UserEntity::getUsername)
-                           .containsExactlyInAnyOrder("Kyde", "Pyke");
+                           .contains("Kyde", "Pyke");
     }
 
     // UPDATE

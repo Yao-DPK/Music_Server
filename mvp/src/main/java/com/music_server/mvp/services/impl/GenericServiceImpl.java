@@ -4,6 +4,8 @@ package com.music_server.mvp.services.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.music_server.mvp.services.GenericService;
@@ -24,8 +26,8 @@ public abstract class GenericServiceImpl<E, ID, R extends JpaRepository<E, ID>> 
     }
 
     
-    public List<E> findAll(){
-        return repository.findAll();
+    public Page<E> findAll(Pageable pageable){
+        return repository.findAll(pageable);
     }
 
     @Transactional

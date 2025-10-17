@@ -25,6 +25,8 @@ import com.music_server.mvp.security.MusicUserDetails;
 import com.music_server.mvp.services.PlaylistService;
 import com.music_server.mvp.services.SongService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/api/v1/playlists")
 public class PlaylistContoller {
@@ -41,7 +43,7 @@ public class PlaylistContoller {
     
 
     @PostMapping(path = "/me")
-    public ResponseEntity createPlaylist(@AuthenticationPrincipal MusicUserDetails userDetails, @RequestBody PlaylistDto playlistDto){
+    public ResponseEntity createPlaylist(@AuthenticationPrincipal MusicUserDetails userDetails, @Valid @RequestBody PlaylistDto playlistDto){
 
         PlaylistEntity playlistEntity = playlistMapper.mapFrom(playlistDto);
         UserEntity creatorReference = new UserEntity();
