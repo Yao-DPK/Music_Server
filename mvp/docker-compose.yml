@@ -1,12 +1,28 @@
 services:
   db:
     image: postgres:14
-    container_name: musicdb
+    container_name: music_db
     environment:
-      POSTGRES_DB: musicdb
+      POSTGRES_DB: music_db
       POSTGRES_USER: pyke_music
       POSTGRES_PASSWORD: PyKe@2709@music
     ports:
       - "5435:5432"
     volumes:
-      - /var/lib/postgresql/data
+      - music_data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    container_name: music_api
+    ports:
+      - "8087:8087"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/music_db
+      SPRING_DATASOURCE_USERNAME: pyke_music
+      SPRING_DATASOURCE_PASSWORD: PyKe@2709@music
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  music_data:

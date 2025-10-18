@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         } catch (Exception e) {
             // Just don't authenticate the User
 
-            System.out.println("Received invalid auth token");
+            System.out.println("Received invalid auth token: " + e);
         }
         
         filterChain.doFilter(request, response);
