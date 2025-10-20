@@ -1,0 +1,50 @@
+# ==========================
+# Ignore Git files
+# ==========================
+.git
+.gitignore
+
+# ==========================
+# Ignore Maven/Gradle build artifacts
+# ==========================
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+
+# ==========================
+# Ignore logs
+# ==========================
+*.log
+logs/
+*.tmp
+
+# ==========================
+# Ignore IDE/project files
+# ==========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ==========================
+# Ignore OS files
+# ==========================
+.DS_Store
+Thumbs.db
+
+# ==========================
+# Ignore env/config files
+# ==========================
+.env
+*.properties
+*.yml
+
+# ==========================
+# Ignore node_modules if you have frontend
+# ==========================
+node_modules/
+dist/
+lifecycle.json
