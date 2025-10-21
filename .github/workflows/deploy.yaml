@@ -35,7 +35,7 @@ jobs:
         run: |
           echo $ECR_REGISTRY
           echo $ECR_REPOSITORY
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest ./backend
+          docker build --no-cache -t $ECR_REGISTRY/$ECR_REPOSITORY:latest ./backend
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Build and push database image
