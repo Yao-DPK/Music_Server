@@ -7,17 +7,21 @@ services:
       POSTGRES_USER: pyke_music
       POSTGRES_PASSWORD: PyKe@2709@music
     ports:
-      - "5435:5435"
+      - "5432:5432"
     volumes:
       - music_data:/var/lib/postgresql/data
 
   backend:
-    build: .
     container_name: music_api
+    build: 
+      
+      context: ./backend
+      dockerfile: Dockerfile
+
     ports:
       - "8087:8087"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5435/music_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/music_db
       SPRING_DATASOURCE_USERNAME: pyke_music
       SPRING_DATASOURCE_PASSWORD: PyKe@2709@music
     depends_on:
