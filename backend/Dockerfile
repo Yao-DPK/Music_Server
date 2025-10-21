@@ -17,4 +17,4 @@ RUN ls -la /app
 
 EXPOSE 8087
 # Attends que la base soit prête avant de démarrer
-ENTRYPOINT ["sh", "-c", "wait-for-it.sh db:5432 -- java -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "/app/wait-for-it.sh db:5432 -- java -jar app.jar"]
