@@ -4,6 +4,8 @@ WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
+RUN ls -la /app
+
 #Etape2: Lancer l'application
 
 FROM eclipse-temurin:17-jdk
