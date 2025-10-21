@@ -15,4 +15,4 @@ RUN chmod +x wait-for-it.sh
 
 EXPOSE 8087
 # Attends que la base soit prête avant de démarrer
-ENTRYPOINT ["sh", "-c", "/wait-for-it.sh db:5432 -- java -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "wait-for-it.sh db:5432 -- java -jar app.jar"]
