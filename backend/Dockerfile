@@ -8,6 +8,7 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
+RUN LS
 COPY --from=build /app/target/*.jar app.jar
 COPY Scripts/wait-for-it.sh /wait-for-it.sh
 RUN chmod +x /wait-for-it.sh
