@@ -4,3 +4,7 @@ serveur_musique_guide.md
 Scripts
 .idea
 lifecycle.json
+
+## Environment ## 
+*.env
+docker-compose.dev.yml
