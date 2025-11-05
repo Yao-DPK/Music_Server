@@ -1,0 +1,74 @@
+$primary-color: royalblue;
+$bg-light: #f5f6fa;
+$text-dark: #111;
+$radius: 1rem;
+$shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+$gap: 2rem;
+
+.home-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  // Hero / welcome section
+  .hero-section {
+    text-align: center;
+    margin-bottom: $gap;
+
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: $primary-color;
+      margin-bottom: 1rem;
+      text-decoration: underline;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: $text-dark;
+    }
+  }
+
+  // Cards / main content
+  .home-content {
+    display: flex;
+    gap: $gap;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .card {
+      background-color: #fff;
+      padding: 1.5rem;
+      border-radius: $radius;
+      box-shadow: $shadow;
+      width: 300px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: $primary-color;
+      }
+
+      .card-text {
+        font-size: 1rem;
+        color: $text-dark;
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .home-content {
+    flex-direction: column;
+    align-items: center;
+  }
+}

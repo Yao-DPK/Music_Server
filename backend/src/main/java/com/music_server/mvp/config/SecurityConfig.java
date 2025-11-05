@@ -25,6 +25,7 @@ import com.music_server.mvp.services.AuthService;
 import com.music_server.mvp.services.MusicUserDetailsService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import com.music_server.mvp.exceptions.CustomCorsConfiguration;
 
 //This is just a Basic implementation, More needs to be done for a production ready environment
 
@@ -37,11 +38,18 @@ public class SecurityConfig {
 
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
+    private CustomCorsConfiguration customCorsConfiguration;
+
     @Autowired
-    public SecurityConfig(MusicUserDetailsService userDetailsService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, CustomAccessDeniedHandler customAccessDeniedHandler) {
+    public SecurityConfig(
+        MusicUserDetailsService userDetailsService, 
+        JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, 
+        CustomAccessDeniedHandler customAccessDeniedHandler,
+        CustomCorsConfiguration customCorsConfiguration) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.customAccessDeniedHandler = customAccessDeniedHandler;
+        this.customCorsConfiguration = customCorsConfiguration;
     }
 
     @Bean
@@ -62,6 +70,7 @@ public class SecurityConfig {
                     .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())
+                .cors(c -> c.configurationSource(customCorsConfiguration))
                 .sessionManagement(
                     session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )

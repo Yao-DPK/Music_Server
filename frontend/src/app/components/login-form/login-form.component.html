@@ -1,0 +1,54 @@
+<div class="auth-container">
+    @if (isLogin()) {
+      <section class="auth-card">
+        <h1 class="auth-title">Login</h1>
+  
+        <form class="auth-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <label for="username">Username</label>
+          <input id="username" formControlName="username" type="text" placeholder="Enter Username" required autocomplete="new-username">
+  
+          <label for="password">Password</label>
+          <input id="password" formControlName="password" type="password" placeholder="Enter Password" required autocomplete="new-password">
+  
+          <button class="auth-button" type="submit" [disabled]="!loginForm.valid">Login</button>
+        </form>
+  
+        <div class="auth-toggle">
+          <p>Don't have an account?</p>
+          <button class="auth-link" (click)="ChangeView()">Register</button>
+        </div>
+      </section>
+    } @else {
+      <section class="auth-card">
+        <h1 class="auth-title">Register</h1>
+  
+        <form class="auth-form" [formGroup]="registerForm" (ngSubmit)="onRegister()">
+          <label for="username">Username</label>
+          <input id="username" formControlName="username" type="text" placeholder="Enter Username" required autocomplete="new-username">
+          @if (registerForm.get('username')?.hasError('required')) {
+            <small class="error-text">Username is required</small>
+          }
+  
+          <label for="password">Password</label>
+          <input id="password" formControlName="password" type="password" placeholder="Enter Password" required autocomplete="new-password">
+          @if (registerForm.get('password')?.hasError('required')) {
+            <small class="error-text">Password is required</small>
+          }
+  
+          <label for="confirmPassword">Confirm Password</label>
+          <input id="confirmPassword" formControlName="confirmPassword" type="password" placeholder="Confirm Password" required>
+          @if (registerForm.hasError('mustMatch')) {
+            <small class="error-text">Passwords don't match</small>
+          }
+  
+          <button class="auth-button" type="submit" [disabled]="!registerForm.valid">Register</button>
+        </form>
+  
+        <div class="auth-toggle">
+          <p>Already have an account?</p>
+          <button class="auth-link" (click)="ChangeView()">Login</button>
+        </div>
+      </section>
+    }
+  </div>
+  
