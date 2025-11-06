@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: mvp
+ 
+
+  # DB config
+  datasource:
+    url: jdbc:postgresql://db:5432:/music-db
+    username: pyke_music
+    password: PyKe_2709_music
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+  
+  # JPA Config
+  jpa:
+    hibernate:
+      ddl-auto: update
+      #show-sql: true
+    properties:
+      hibernate:
+        format-sql: true
+
+
+jwt:
+  secret: VGhpcy1pcy1hLXN1ZmZpY2llbnRseS1sb25nLXNlY3JldC1rZXktZm9yLUpXVHM=
+
+
+server:
+  port: 8087

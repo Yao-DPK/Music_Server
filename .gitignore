@@ -8,3 +8,4 @@ lifecycle.json
 ## Environment ## 
 *.env
 docker-compose.dev.yml
+env_files

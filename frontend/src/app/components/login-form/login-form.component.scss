@@ -1,9 +1,10 @@
 // 🔹 Variables for consistency
 $primary-color: royalblue;
 $error-color: #e63946;
+$info-color: rgb(0, 132, 255);
 $radius: 1rem;
 $shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-
+w
 // 🔹 Layout container
 .auth-container {
   display: flex;
@@ -58,6 +59,12 @@ $shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 
   .error-text {
     color: $error-color;
+    font-size: 0.875rem;
+    align-self: flex-start;
+  }
+
+  .info-text {
+    color: $info-color;
     font-size: 0.875rem;
     align-self: flex-start;
   }

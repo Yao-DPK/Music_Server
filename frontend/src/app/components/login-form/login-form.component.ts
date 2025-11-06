@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import {ReactiveFormsModule, FormControl, FormGroup, Validators, ValidatorFn, AbstractControl, ValidationErrors} from '@angular/forms'
 import { LoginService } from '../../services/login.service';
 import { catchError, pipe } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
@@ -13,6 +14,8 @@ import { catchError, pipe } from 'rxjs';
 export class LoginFormComponent {
 
   isLogin = signal(true);
+  message = signal('');
+  private router = inject(Router);
 
   loginForm = new FormGroup({
     username : new FormControl('', 
@@ -49,12 +52,14 @@ export class LoginFormComponent {
     .login(this.loginForm.value.username!, this.loginForm.value.password!)
     .pipe(
       catchError((err) => {
-        console.log(err);
+        console.log(err.error.message);
+        this.message.set(err.error.message);
         throw err;
       })
     )
     .subscribe((res) => {
       console.log("Resultat: ", res)
+      this.router.navigate(['/home'])
     })
   }
 
@@ -69,6 +74,7 @@ export class LoginFormComponent {
     )
     .subscribe((res) => {
       console.log("Resultat: ", res)
+      this.isLogin.set(true)
     })
   }
 

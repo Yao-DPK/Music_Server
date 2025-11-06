@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:14
+    container_name: music_db
+    env_file:
+      - env_files/.env.prod
+    ports:
+      - "5437:5432"
+    volumes:
+      - music_data:/var/lib/postgresql/data
+
+  backend:
+    container_name: music_api
+    env_file:
+      - env_files/.env.prod
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8087:8087"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+    
+
+volumes:
+  music_data:
