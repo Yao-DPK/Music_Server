@@ -3,18 +3,23 @@ import {ReactiveFormsModule, FormControl, FormGroup, Validators, ValidatorFn, Ab
 import { LoginService } from '../../services/login.service';
 import { catchError, pipe } from 'rxjs';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
+import { ToastComponent } from "../toast/toast.component";
 
 @Component({
   selector: 'app-login-form',
   imports: [ReactiveFormsModule],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss',
-  providers:[LoginService]
+  providers:[AuthService]
 })
 export class LoginFormComponent {
 
   isLogin = signal(true);
   message = signal('');
+  showsToast = signal(false);
+
   private router = inject(Router);
 
   loginForm = new FormGroup({
@@ -42,46 +47,57 @@ export class LoginFormComponent {
 
   ChangeView(){
     this.isLogin.update((val) => !val);
+    this.message.set('');
     this.loginForm.reset();
     this.registerForm.reset();
   }
   
 
   onLogin(){
-    this.loginService
+    this.authService
     .login(this.loginForm.value.username!, this.loginForm.value.password!)
     .pipe(
       catchError((err) => {
         console.log(err.error.message);
         this.message.set(err.error.message);
+        this.showError(err.error.message);
         throw err;
       })
     )
     .subscribe((res) => {
       console.log("Resultat: ", res)
+      this.showSuccess("Login Successfull");
       this.router.navigate(['/home'])
     })
   }
 
   onRegister(){
-    this.loginService
+    this.authService
     .register(this.registerForm.value.username!, this.registerForm.value.password!)
     .pipe(
       catchError((err) => {
         console.log(err);
+        this.showError(err.error.message);
         throw err;
       })
     )
     .subscribe((res) => {
       console.log("Resultat: ", res)
+      this.showSuccess("Registration Successfull");
       this.isLogin.set(true)
     })
   }
 
-
-
-  loginService = inject(LoginService)
-
+  authService = inject(AuthService)
+  toastService = inject(ToastService)
+  
+  showSuccess(message: string) {
+    this.toastService.show(message, 'success');
+  }
+  
+  showError(message: string) {
+    this.toastService.show(message, 'error');
+  }
 
 }
 

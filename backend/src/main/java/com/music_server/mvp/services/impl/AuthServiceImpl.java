@@ -42,10 +42,13 @@ public class AuthServiceImpl implements AuthService{
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Value("${jwt.secret}")
+    @Value("${security.jwt.secret}")
     private String secretKey;
 
-    private final Long jwtExpiryMs = 86400000L;
+    @Value("${security.jwt.expirationMs}")
+    private Long jwtExpiryMs;
+
+    //private final Long jwtExpiryMs = 86400000L;
 
     @Override
     public UserDetails authenticate(String username, String password) {
@@ -55,10 +58,13 @@ public class AuthServiceImpl implements AuthService{
         return userDetailsService.loadUserByUsername(username);
 
     }
+    
 
     @Override
-    public String generateToken(UserDetails userDetails) {
+    public String generateAccessToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        
+
         return Jwts.builder()
         .setClaims(claims)
         .setSubject(userDetails.getUsername())

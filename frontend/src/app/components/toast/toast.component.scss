@@ -1,0 +1,56 @@
+%default-toast {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 260px;
+    max-width: 320px;
+    min-height: 70px;
+    margin-bottom: 1rem;
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    font-size: 0.95rem;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  
+  :host {
+    /* Make host a top-level stacking context and allow fixed positioning inside safely */
+    position: fixed;
+    inset: 0;               /* top:0; right:0; bottom:0; left:0 */
+    pointer-events: none;   /* allow clicks to pass through except the actual toast */
+    z-index: 99999;         /* very high so it sits on top */
+  }
+
+  .toast-container {
+  position: fixed;     /* keep the same */
+  top: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  pointer-events: none; /* container shouldn't capture pointer — individual toasts will */
+  width: auto;
+  max-width: calc(100% - 3rem);
+}
+  
+  .toast {
+    @extend %default-toast;
+  
+    &.success { border-left: 6px solid green; background: #e8f9e8; }
+    &.error   { border-left: 6px solid red; background: #f9e8e8; }
+    &.info    { border-left: 6px solid royalblue; background: #e8efff; }
+  
+    &:hover { transform: translateY(-3px); }
+    pointer-events: auto;
+  }
+  
+  .close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #555;
+    margin-left: 1rem;
+  }
+  

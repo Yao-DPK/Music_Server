@@ -8,6 +8,8 @@ public class UserDto {
     @NotBlank(message = "Username is required")
     private String username;
     
+    
+
     public UserDto() {
     }
 

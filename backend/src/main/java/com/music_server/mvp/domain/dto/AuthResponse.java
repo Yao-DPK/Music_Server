@@ -3,7 +3,10 @@ package com.music_server.mvp.domain.dto;
 public class AuthResponse {
 
     private String token;
+    
     private long expiresIn;
+
+
     public AuthResponse() {
     }
     public AuthResponse(String token, long expiresIn) {

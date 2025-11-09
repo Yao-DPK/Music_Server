@@ -6,19 +6,14 @@
         <form class="auth-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
           <label for="username">Username</label>
           <input id="username" formControlName="username" type="text" placeholder="Enter Username" required autocomplete="new-username">
-          @if (registerForm.get('username')?.hasError('required')) {
+          @if (loginForm.get('username')?.hasError('required')) {
             <small class="info-text">Username is required</small>
           }
   
           <label for="password">Password</label>
           <input id="password" formControlName="password" type="password" placeholder="Enter Password" required autocomplete="new-password">
-          @if (registerForm.get('password')?.hasError('required')) {
+          @if (loginForm.get('password')?.hasError('required')) {
             <small class="info-text">Password is required</small>
-          }
-
-
-          @if (message() !== ''){
-            <small class="error-text">{{message()}}</small>
           }
   
           <button class="auth-button" type="submit" [disabled]="!loginForm.valid">Login</button>
@@ -52,9 +47,7 @@
             <small class="error-text">Passwords don't match</small>
           }
           
-          @if (message() !== ''){
-            <small class="error-text">{{message()}}</small>
-          }
+
           <button class="auth-button" type="submit" [disabled]="!registerForm.valid">Register</button>
         </form>
         
@@ -67,4 +60,3 @@
       </section>
     }
   </div>
-  

@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-@Getter
+
 public class MusicUserDetails implements UserDetails{
 
     private final UserEntity userEntity;
@@ -64,6 +64,12 @@ public class MusicUserDetails implements UserDetails{
 
     public Long getId(){
         return userEntity.getId();
+    }
+
+
+
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
 

@@ -26,10 +26,11 @@ spring:
       hibernate:
         format-sql: true
 
-
-jwt:
-  secret: VGhpcy1pcy1hLXN1ZmZpY2llbnRseS1sb25nLXNlY3JldC1rZXktZm9yLUpXVHM=
-
+security:
+  jwt:
+    secret: VGhpcy1pcy1hLXN1ZmZpY2llbnRseS1sb25nLXNlY3JldC1rZXktZm9yLUpXVHM=
+    expirationMs: 60000  # 15 minutes
+    refreshExpirationMs: 604800000 # 7 days
 
 server:
   port: 8087
