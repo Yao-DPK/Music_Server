@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { LoginRequest } from '../../../models/login.type';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()

@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TokenService } from '../../services/token.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -8,5 +10,11 @@ import { RouterLink } from '@angular/router';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  title=signal("pyke_studio")
+  title=signal("pyke's player");
+  tokenService = inject(TokenService);
+  authService = inject(AuthService)
+
+  onLogout(){
+    this.authService.logout();
+  }
 }

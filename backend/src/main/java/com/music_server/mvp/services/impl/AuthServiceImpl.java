@@ -61,13 +61,13 @@ public class AuthServiceImpl implements AuthService{
     
 
     @Override
-    public String generateAccessToken(UserDetails userDetails) {
+    public String generateAccessToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         
 
         return Jwts.builder()
         .setClaims(claims)
-        .setSubject(userDetails.getUsername())
+        .setSubject(username)
         .setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis()+ jwtExpiryMs))
         .signWith(getSigninKey(), SignatureAlgorithm.HS256)

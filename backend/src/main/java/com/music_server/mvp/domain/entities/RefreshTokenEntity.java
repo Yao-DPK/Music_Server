@@ -69,6 +69,9 @@ public class RefreshTokenEntity {
     
     
     // ----- Utility Methods -----
+    public boolean isExpired() {
+        return expiryDate.isBefore(Instant.now());
+    }
 
     // ----- toString -----
     @Override

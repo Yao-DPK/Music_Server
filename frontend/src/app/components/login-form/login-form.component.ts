@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
 import { ToastComponent } from "../toast/toast.component";
+import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-login-form',
@@ -65,8 +66,9 @@ export class LoginFormComponent {
       })
     )
     .subscribe((res) => {
-      console.log("Resultat: ", res)
-      this.showSuccess("Login Successfull");
+      console.log("Resultat: ", res);
+      this.tokenService.setAccessToken(res.token);
+      this.showSuccess("Login Successful");
       this.router.navigate(['/home'])
     })
   }
@@ -83,13 +85,18 @@ export class LoginFormComponent {
     )
     .subscribe((res) => {
       console.log("Resultat: ", res)
-      this.showSuccess("Registration Successfull");
+      this.showSuccess("Registration Successful, You may login");
       this.isLogin.set(true)
     })
   }
 
+  onLogout(){
+    this.authService.logout();
+  }
+
   authService = inject(AuthService)
   toastService = inject(ToastService)
+  tokenService = inject(TokenService)
   
   showSuccess(message: string) {
     this.toastService.show(message, 'success');

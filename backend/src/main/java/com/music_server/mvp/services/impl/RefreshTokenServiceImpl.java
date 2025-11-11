@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Service
@@ -27,24 +28,34 @@ public class RefreshTokenServiceImpl extends GenericServiceImpl<RefreshTokenEnti
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public RefreshTokenServiceImpl(RefreshTokenRepository repository,
-                               UserRepository userRepository) {
+                               UserRepository userRepository,
+                               PasswordEncoder passwordEncoder) {
         super(repository);
         this.refreshTokenRepository = repository;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public String generateRefreshToken() {
+        return UUID.randomUUID().toString();
     }
 
     public RefreshTokenEntity createRefreshToken(Long userId) {
+
         RefreshTokenEntity existing = refreshTokenRepository.findByUserId(userId).orElseThrow();
+        String hashedRefreshToken = passwordEncoder.encode(generateRefreshToken());
         if (existing != null) {
-            existing.setToken(UUID.randomUUID().toString());
+            existing.setToken(hashedRefreshToken);
             existing.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
             return refreshTokenRepository.save(existing);
         } else {
+            
             RefreshTokenEntity refreshToken = new RefreshTokenEntity();
             refreshToken.setUser(userRepository.findById(userId).orElseThrow());
-            refreshToken.setToken(UUID.randomUUID().toString());
+            refreshToken.setToken(hashedRefreshToken);
             refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
             return refreshTokenRepository.save(refreshToken);
         }
@@ -62,9 +73,21 @@ public class RefreshTokenServiceImpl extends GenericServiceImpl<RefreshTokenEnti
         return token;
     }
 
+    
+
     @Transactional
     public int deleteByUserId(Long userId) {
         return refreshTokenRepository.deleteByUser(userRepository.findById(userId).orElseThrow());
     }
+
+    @Transactional
+    public RefreshTokenEntity update(RefreshTokenEntity token) {
+        return refreshTokenRepository.findByToken(token.getToken()).map(foundToken -> {
+            Optional.ofNullable(token.getToken()).ifPresent(foundToken::setToken);
+            return repository.save(token);
+        }).orElseThrow(()-> new RuntimeException("Refresh Token Not Found"));
+    }
+
+    
 
 }

@@ -27,6 +27,8 @@ public class CustomCorsConfiguration implements CorsConfigurationSource {
         config.setAllowedOrigins(List.of("http://localhost:4200", "http://127.0.0.1:4200", frontend_url));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+        config.addExposedHeader("Set-Cookie");
         return config;
     }
 }

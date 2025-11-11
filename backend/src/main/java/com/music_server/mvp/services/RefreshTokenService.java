@@ -10,5 +10,7 @@ public interface RefreshTokenService extends GenericService<RefreshTokenEntity, 
     Optional<RefreshTokenEntity> findByToken(String token);
     RefreshTokenEntity createRefreshToken(Long userId);
     RefreshTokenEntity verifyExpiration(RefreshTokenEntity token);
+    RefreshTokenEntity update(RefreshTokenEntity token);
     int deleteByUserId(Long userId);
+    String generateRefreshToken();
 }

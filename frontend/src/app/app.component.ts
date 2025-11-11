@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LoginFormComponent } from "./components/login-form/login-form.component";
 import { HeaderComponent } from "./components/header/header.component";
 import { ToastComponent } from "./components/toast/toast.component";
 import { ToastService } from './services/toast.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +12,20 @@ import { ToastService } from './services/toast.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'Pyke';
   purpose = "Pyke";
 
+  constructor(private authService: AuthService) {}
 
+
+  ngOnInit() {
+    // Attempt silent refresh at startup
+    this.authService.refreshToken().subscribe({
+      next: () => console.log('Token refreshed'),
+      error: () => console.log('No valid refresh token, user must log in')
+    });
+
+    
+}
 }
