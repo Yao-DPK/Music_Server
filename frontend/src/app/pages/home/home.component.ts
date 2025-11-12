@@ -1,9 +1,10 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { PlaylistService } from '../../services/playlist.service';
+import { PlayerComponent } from "../../components/player/player.component";
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [PlayerComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   providers:[PlaylistService]

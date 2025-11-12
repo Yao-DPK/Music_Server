@@ -1,0 +1,40 @@
+.player-container {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    padding: 2rem;
+    background-color: #1a1a1a;
+    border-radius: 1rem;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  
+    .cover {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+    }
+  
+    .track-title {
+      margin-top: 1rem;
+    }
+  
+    .track-artist {
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+  
+    .controls button {
+      background-color: #222;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: 0.2s;
+      
+      &:hover {
+        background-color: #444;
+      }
+    }
+  }
+  

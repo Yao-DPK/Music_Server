@@ -4,21 +4,29 @@ import { AuthService } from '../services/auth.service';
 import { TokenService } from '../services/token.service';
 import { catchError, map, of } from 'rxjs';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = () => {
   const tokenService = inject(TokenService);
   const authService = inject(AuthService);
+  const router = inject(Router);
   const token = tokenService.getAccessToken();
 
-  if (!tokenService.isTokenExpired(token!)) {
-    return true; // token valid, allow navigation
+  // ✅ Token valid
+  if (token && !tokenService.isTokenExpired(token)) {
+    return true;
   }
 
-  // token expired — try silent refresh
-  return authService.refreshToken().pipe(
-    map(() => true),
-    catchError(() => {
-      authService.logout();
-      return of(false);
-    })
-  );
+  if (token && tokenService.isTokenExpired(token)) {
+    // ⚙️ Token expired → try refresh
+    return authService.refreshToken().pipe(
+      map(() => true),
+      catchError(() => {
+        authService.logout();
+        router.navigate(['/login']);
+        return of(false);
+      })
+    );
+  }
+
+  router.navigate(['/login']);
+    return false;
 };

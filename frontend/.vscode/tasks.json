@@ -37,6 +37,17 @@
           }
         }
       }
-    }
+    },
+
+    {
+          "label": "Start Dev Environment - Frontend",
+          "type": "shell",
+          "command": "Scripts/wait-and-start-frontend.sh",
+          "problemMatcher": [],
+          "runOptions": {
+            "runOn": "folderOpen"
+          }
+   }
+    
   ]
 }

@@ -1,5 +1,6 @@
 package com.music_server.mvp.controllers;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.music_server.mvp.domain.dto.PlaylistDto;
 import com.music_server.mvp.domain.dto.SongDto;
@@ -47,14 +50,29 @@ public class SongController {
     }
 
     @PostMapping(path = "/me")
-    public ResponseEntity uploadSong(@AuthenticationPrincipal MusicUserDetails userDetails, @Valid @RequestBody SongDto songDto){
+    public ResponseEntity<SongDto> uploadSong(@AuthenticationPrincipal MusicUserDetails userDetails, @Valid @RequestBody SongDto songDto, @RequestParam("file") MultipartFile file){
 
-        SongEntity songEntity = songMapper.mapFrom(songDto);
-        UserEntity ownerReference = new UserEntity();
-        ownerReference.setId(userDetails.getId()); // juste l'id
-        songEntity.setOwner(ownerReference);
-        SongEntity savedSong = songService.create(songEntity);
-        return new ResponseEntity<>(songMapper.mapTo(savedSong), HttpStatus.CREATED);
+        try {
+            SongEntity songEntity = songMapper.mapFrom(songDto);
+            UserEntity ownerReference = new UserEntity();
+            ownerReference.setId(userDetails.getId()); // juste l'id
+            songEntity.setOwner(ownerReference);
+            SongEntity savedSong = songService.create(songEntity);
+
+            // Save temporarily
+            File tempFile = File.createTempFile("upload-", file.getOriginalFilename());
+            file.transferTo(tempFile);
+
+
+
+            return new ResponseEntity<>(songMapper.mapTo(savedSong), HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+
+        
     }
 
     @GetMapping(path = "/me")

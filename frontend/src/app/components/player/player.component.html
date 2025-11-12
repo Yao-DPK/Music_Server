@@ -1,0 +1,15 @@
+<div class="player-container flex flex-col items-center justify-center text-center">
+  @if (currentTrack$ | async) {
+    <h2 class="track-title text-xl font-bold">{{ (currentTrack$ | async)?.title }}</h2>
+
+    <div class="controls flex gap-4 mt-4">
+      <button (click)="prev()">⏮️</button>
+      <button (click)="togglePlayPause()">
+        {{ (isPlaying$ | async) ? '⏸️' : '▶️' }}
+      </button>
+      <button (click)="next()">⏭️</button>
+    </div>
+  } @else {
+    <p class="text-gray-500">Choisissez une chanson pour commencer à jouer 🎵</p>
+  }
+</div>

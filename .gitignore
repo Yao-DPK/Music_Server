@@ -9,3 +9,6 @@ lifecycle.json
 *.env
 docker-compose.dev.yml
 env_files
+workspaces
+db
+start-all.sh

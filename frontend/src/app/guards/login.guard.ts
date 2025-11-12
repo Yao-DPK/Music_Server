@@ -1,14 +1,18 @@
-import { CanActivateFn, Router } from "@angular/router";
-import { TokenService } from "../services/token.service";
-import { inject } from "@angular/core";
+import { CanActivateFn, Router } from '@angular/router';
+import { TokenService } from '../services/token.service';
+import { inject } from '@angular/core';
 
-export const loginGuard: CanActivateFn = (route, state) => {
+export const loginGuard: CanActivateFn = () => {
   const router = inject(Router);
   const tokenService = inject(TokenService);
   const token = tokenService.getAccessToken();
-  if (tokenService.isTokenExpired(token!)) {
+
+  // If user already authenticated → go home
+  if (token && !tokenService.isTokenExpired(token)) {
     router.navigate(['/home']);
     return false;
   }
+
+  // Otherwise → allow access to login page
   return true;
 };
