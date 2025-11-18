@@ -10,5 +10,6 @@ lifecycle.json
 config
 env_files
 workspaces
+Cheatsheets
 db
 start-all.sh
