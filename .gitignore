@@ -13,3 +13,4 @@ workspaces
 Cheatsheets
 db
 start-all.sh
+*.vscode
