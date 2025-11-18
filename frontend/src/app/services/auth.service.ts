@@ -4,12 +4,6 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { TokenService } from './token.service';
 
-
-export function initializeAuth(authService: AuthService) {
-  return () => authService.refreshToken();
-}
-
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private _isLoggedIn$ = new BehaviorSubject<boolean>(false);
@@ -17,12 +11,10 @@ export class AuthService {
   tokenService = inject(TokenService);
 
   constructor(private http: HttpClient) {
-    this._isLoggedIn$.next(!!this.getAccessToken());
+    this._isLoggedIn$.next(!!this.tokenService.getAccessToken());
   }
 
   login(username: string, password: string) {
-
-    
 
     return this.http.post<{ token: string }>(
       `${environment.apiUrl}/auth/login`,
@@ -30,7 +22,7 @@ export class AuthService {
       { withCredentials: true } // ⬅ sends + receives cookies
     ).pipe(
       tap(response => {
-        this.setAccessToken(response.token);
+        this.tokenService.setAccessToken(response.token);
         this._isLoggedIn$.next(true);
       })
     );
@@ -43,29 +35,11 @@ export class AuthService {
       username: username,
       password: password
     },
-    { withCredentials: true } // ⬅ sends + receives cookies
   );
   }
 
-  refreshToken(): Observable<any>  {
-    return this.tokenService.refreshToken();
-  }
-
   logout() {
-    this.clearAccessToken();
+    this.tokenService.clearTokens();
     this._isLoggedIn$.next(false);
-  }
-
-  getAccessToken(): string | null {
-    return this.tokenService.getAccessToken();
-  }
-
-  setAccessToken(token: string) {
-    return this.tokenService.setAccessToken(token);
-  }
-
-  clearAccessToken() {
-    this.tokenService.clearTokens()
-    
   }
 }

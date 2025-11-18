@@ -12,11 +12,11 @@ import { AsyncPipe } from '@angular/common';
   imports: [AsyncPipe]
 })
 export class PlayerComponent implements OnInit {
-  currentTrack$: Observable<Song | null>;
+  currentTrack$: Observable<Song | null>; 
   isPlaying$: Observable<boolean>;
 
   constructor(private playerService: PlayerService) {
-    this.currentTrack$ = this.playerService.getCurrentTrack();
+    this.currentTrack$ = new Observable();
     this.isPlaying$ = this.playerService.getIsPlaying();
   }
 

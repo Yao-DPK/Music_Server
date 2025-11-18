@@ -1,4 +1,4 @@
-package com.music_server.mvp.controllers;
+/* package com.music_server.mvp.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -156,3 +156,4 @@ public class SongControllerIntegrationTests {
         // The song should always belong to authenticated user, not the payload
     }
 }
+ */

@@ -1,4 +1,4 @@
-package com.music_server.mvp.repositories;
+/* package com.music_server.mvp.repositories;
 
 import java.util.Optional;
 import java.util.List;
@@ -100,3 +100,4 @@ public class UserRepositoryIntegrationTests {
         assertThat(results).isEmpty();
     }
 }
+ */

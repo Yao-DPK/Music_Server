@@ -7,7 +7,6 @@ import com.music_server.mvp.domain.entities.UserEntity;
 
 public interface SongService extends GenericService<SongEntity, Long> {
 
-    List<SongEntity> findUsersSongsById(Long userId);
-    List<SongEntity> findUsersSongsByUsername(String username);
+    List<SongEntity> findUsersSongsByUsername(String owner);
 
 }

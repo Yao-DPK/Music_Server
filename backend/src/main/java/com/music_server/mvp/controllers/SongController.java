@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,35 +52,39 @@ public class SongController {
         this.songMapper = songMapper;
     }
 
-    @PostMapping(path = "/me")
-    public ResponseEntity<SongDto> uploadSong(@AuthenticationPrincipal MusicUserDetails userDetails, @Valid @RequestBody SongDto songDto, @RequestParam("file") MultipartFile file){
-
+    @PostMapping(
+        path = "/me",
+        consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<SongDto> uploadSong(
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("title") String title,
+            Authentication connectedUser
+    ) {
         try {
-            SongEntity songEntity = songMapper.mapFrom(songDto);
-            UserEntity ownerReference = new UserEntity();
-            ownerReference.setId(userDetails.getId()); // juste l'id
-            songEntity.setOwner(ownerReference);
+            SongEntity songEntity = new SongEntity();
+            songEntity.setTitle(title);
+            songEntity.setOwner(connectedUser.getName());
+
             SongEntity savedSong = songService.create(songEntity);
 
-            // Save temporarily
-            File tempFile = File.createTempFile("upload-", file.getOriginalFilename());
-            file.transferTo(tempFile);
-
-
-
-            return new ResponseEntity<>(songMapper.mapTo(savedSong), HttpStatus.CREATED);
+            System.out.println("Receiving Song: " + title);
+            
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(songMapper.mapTo(savedSong));
 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
-
-        
     }
 
     @GetMapping(path = "/me")
-    public ResponseEntity<List<SongDto>> getUsersSongs(@AuthenticationPrincipal MusicUserDetails userDetails){
-        List<SongEntity> songs = songService.findUsersSongsById(userDetails.getId());
+    public ResponseEntity<List<SongDto>> getUsersSongs(/* @AuthenticationPrincipal MusicUserDetails userDetails,  */
+    Authentication connectedUser)
+    {   
+        System.out.println("Songs Requested");
+        List<SongEntity> songs = songService.findUsersSongsByUsername(connectedUser.getName());
         return new ResponseEntity<>(songs.stream().map(songMapper::mapTo).collect(Collectors.toList()), HttpStatus.OK);
     }
 }

@@ -1,0 +1,31 @@
+// 🔹 Variables for consistency
+$primary-color: royalblue;
+$error-color: #e63946;
+$info-color: rgb(0, 132, 255);
+$radius: 1rem;
+$shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+
+
+.file-input{
+    display: none
+}
+
+.upload-btn{
+    display: flex;
+    border: 1rem;
+    background-color: $primary-color;
+    transition: background-color 0.3s ease;
+
+    &:hover{
+        background-color: green;
+    }
+}
+
+.page-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    
+}
+

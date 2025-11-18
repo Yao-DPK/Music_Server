@@ -1,4 +1,4 @@
-package com.music_server.mvp.controllers;
+/* package com.music_server.mvp.controllers;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -42,13 +42,13 @@ public class AuthController {
 
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
-    private final PasswordEncoder passwordEncoder;
+    //private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthController(AuthService authService, RefreshTokenService refreshTokenService, PasswordEncoder passwordEncoder){
+    public AuthController(AuthService authService, RefreshTokenService refreshTokenService , PasswordEncoder passwordEncoder){
         this.authService = authService;
         this.refreshTokenService = refreshTokenService;
-        this.passwordEncoder = passwordEncoder;
+        //this.passwordEncoder = passwordEncoder;
         
     }
 
@@ -56,20 +56,30 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response){
         MusicUserDetails userDetails = (MusicUserDetails) authService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
         
-        String jwt = authService.generateAccessToken(userDetails.getUsername());
-        RefreshTokenEntity refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+        String accessToken = authService.generateAccessToken(userDetails.getUsername());
+        //RefreshTokenEntity refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
 
         // Send cookie
-        ResponseCookie cookie = ResponseCookie.from("refresh_token", refreshToken.getToken())
-                .httpOnly(true)
-                .secure(true)
-                .path("/api/auth/refresh")
-                .sameSite("Strict")
-                .maxAge(Duration.ofDays(7))
-                .build();
-        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        ResponseCookie accessCookie = ResponseCookie.from("access_token", accessToken)
+        .httpOnly(true)
+        .secure(true)
+        .sameSite("Strict")
+        .path("/")
+        .maxAge(600) // 10 minutes
+        .build();
 
-        return new ResponseEntity<>(new AuthResponse(jwt, 86400L), HttpStatus.OK);
+     ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", refreshToken.getToken())
+        .httpOnly(true)
+        .secure(true)
+        .sameSite("Strict")
+        .path("/")
+        .maxAge(2592000) // 30 days
+        .build(); 
+
+        response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
+        //response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+
+        return new ResponseEntity<>(new AuthResponse(accessToken, 86400) ,HttpStatus.OK);
     }
 
     @PostMapping(path = "/register")
@@ -99,7 +109,7 @@ public class AuthController {
 
         // Rotate token
         String newRefreshToken = refreshTokenService.generateRefreshToken();
-        tokenEntity.setToken(passwordEncoder.encode(newRefreshToken));
+        //tokenEntity.setToken(passwordEncoder.encode(newRefreshToken));
         tokenEntity.setExpiryDate(Instant.now().plus(7, ChronoUnit.DAYS));
         refreshTokenService.update(tokenEntity);
 
@@ -121,3 +131,4 @@ public class AuthController {
     }
 
 }
+ */

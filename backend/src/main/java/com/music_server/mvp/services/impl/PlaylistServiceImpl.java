@@ -3,7 +3,7 @@ package com.music_server.mvp.services.impl;
 import com.music_server.mvp.repositories.PlaylistItemRepository;
 import com.music_server.mvp.repositories.PlaylistRepository;
 import com.music_server.mvp.repositories.SongRepository;
-import com.music_server.mvp.repositories.UserRepository;
+//import com.music_server.mvp.repositories.UserRepository;
 import com.music_server.mvp.services.PlaylistService;
 
 import jakarta.transaction.Transactional;
@@ -22,11 +22,11 @@ import com.music_server.mvp.domain.entities.UserEntity;
 @Service
 public class PlaylistServiceImpl extends GenericServiceImpl<PlaylistEntity, Long,  PlaylistRepository> implements PlaylistService{
     
-    private final UserRepository userRepository;
+    //private final UserRepository userRepository;
 
-    public PlaylistServiceImpl(PlaylistRepository repository, UserRepository userRepository){
+    public PlaylistServiceImpl(PlaylistRepository repository/* , UserRepository userRepository */){
         super(repository);
-        this.userRepository = userRepository;
+        //this.userRepository = userRepository;
     }
 
     @Autowired
@@ -38,11 +38,6 @@ public class PlaylistServiceImpl extends GenericServiceImpl<PlaylistEntity, Long
     
     @Override
     public PlaylistEntity create(PlaylistEntity playlist) {
-        // Récupérer l'utilisateur attaché à la session
-        UserEntity creator = userRepository.findById(playlist.getCreator().getId())
-                                         .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        playlist.setCreator(creator);
-
         return repository.save(playlist);
     }
 
@@ -67,13 +62,7 @@ public class PlaylistServiceImpl extends GenericServiceImpl<PlaylistEntity, Long
     }
 
     @Override
-    public List<PlaylistEntity> findUsersPlaylistsById(Long id){
-        return repository.findAllByCreator_Id(id);
+    public List<PlaylistEntity> findUsersPlaylistsByUsername(String creator){
+        return repository.findAllByCreator(creator);
     }
-
-    @Override
-    public List<PlaylistEntity> findUsersPlaylistsByUsername(String username){
-        return repository.findAllByCreator_Username(username);
-    }
-
 }

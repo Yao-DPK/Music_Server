@@ -19,70 +19,61 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.music_server.mvp.domain.entities.UserEntity;
 import com.music_server.mvp.exceptions.CustomAccessDeniedHandler;
 import com.music_server.mvp.exceptions.JwtAuthenticationEntryPoint;
-import com.music_server.mvp.repositories.UserRepository;
-import com.music_server.mvp.security.JwtAuthenticationFilter;
+//import com.music_server.mvp.repositories.UserRepository;
+//import com.music_server.mvp.security.JwtAuthenticationFilter;
 import com.music_server.mvp.services.AuthService;
-import com.music_server.mvp.services.MusicUserDetailsService;
+//import com.music_server.mvp.services.MusicUserDetailsService;
 
 import jakarta.servlet.http.HttpServletResponse;
-import com.music_server.mvp.exceptions.CustomCorsConfiguration;
+import com.music_server.mvp.security.CustomCorsConfiguration;
 
 //This is just a Basic implementation, More needs to be done for a production ready environment
 
 @Configuration
 public class SecurityConfig {
 
-    private final MusicUserDetailsService userDetailsService;
-
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    private CustomAccessDeniedHandler customAccessDeniedHandler;
-
     private CustomCorsConfiguration customCorsConfiguration;
 
     @Autowired
     public SecurityConfig(
-        MusicUserDetailsService userDetailsService, 
-        JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, 
-        CustomAccessDeniedHandler customAccessDeniedHandler,
         CustomCorsConfiguration customCorsConfiguration) {
-        this.userDetailsService = userDetailsService;
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        this.customAccessDeniedHandler = customAccessDeniedHandler;
         this.customCorsConfiguration = customCorsConfiguration;
     }
 
-    @Bean
+/*     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(AuthService authService){
         return new JwtAuthenticationFilter(authService);
     }
-    
+     */
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http/* , JwtAuthenticationFilter jwtAuthenticationFilter */) throws Exception{
         
         http
+                
+                .csrf(csrf -> csrf.disable())
+                .cors(c -> c.configurationSource(customCorsConfiguration))
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
-                    /* .requestMatchers(HttpMethod.GET, "/api/v1/users/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/v1/playlists/**").permitAll()
+                    /*.requestMatchers(HttpMethod.GET, "/api/v1/playlists/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/songs/**").permitAll() */
                     .anyRequest().authenticated()
                 )
-                .csrf(csrf -> csrf.disable())
-                .cors(c -> c.configurationSource(customCorsConfiguration))
-                .sessionManagement(
+                .oauth2ResourceServer(auth -> 
+                auth.jwt(token -> token.jwtAuthenticationConverter(new KeycloackJwtAuthenticationConverter())));
+                
+                /* .sessionManagement(
                     session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .exceptionHandling(ex -> ex
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)  // 401 handler
                 .accessDeniedHandler(customAccessDeniedHandler)         // 403 handler
-            )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                ) 
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);*/
         return http.build();
     }
 
-    @Bean 
+    /* @Bean 
     public PasswordEncoder passwordEncoder(){
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
@@ -90,5 +81,5 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
         return config.getAuthenticationManager();
-    }
+    } */
 }

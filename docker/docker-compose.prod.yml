@@ -3,7 +3,7 @@ services:
     image: postgres:14
     container_name: music_db
     env_file:
-      - env_files/.env.prod
+      - ../backend/infrastructure/env_files/.env.prod
     ports:
       - "5437:5432"
     volumes:

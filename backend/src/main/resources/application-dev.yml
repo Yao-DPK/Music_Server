@@ -1,6 +1,10 @@
 spring:
   application:
     name: mvp
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
   
   # DB config
   datasource:
@@ -20,11 +24,17 @@ spring:
       #show-sql: true
     properties:
       hibernate:
-        format-sql: true
+        format-sql: trueù
+  
+  security:
+    oauth2:
+      resourceserver:
+        jwt:  
+          issuer-uri: "http://localhost:9097/realms/music-app"
 
 test:
   frontend:
-    url: https://0q4gh9cl-4200.uks1.devtunnels.ms/
+    url: https://0q4gh9cl-4200.uks1.devtunnels.ms
 
 
 security:
@@ -35,3 +45,13 @@ security:
 
 server:
   port: 8087
+
+
+keycloak:
+  realm : music-app
+  auth-server-url: http://localhost:9097
+  resource: angular-client
+  security-constraints[0]:
+    authRoles[0]: USER  
+    securityCollections[0]:
+      patterns: /api/*

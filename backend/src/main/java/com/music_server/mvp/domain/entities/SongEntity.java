@@ -13,9 +13,12 @@ public class SongEntity {
     private String title;
 
     // Plusieurs chansons peuvent appartenir à un même utilisateur
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    /* @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id") // clé étrangère
-    private UserEntity owner;
+    private UserEntity owner; */
+
+    @Column(name= "owner")
+    private String owner;
 
     // ----- Constructors -----
     public SongEntity() {
@@ -27,12 +30,12 @@ public class SongEntity {
     }
 
 
-    public SongEntity(String title, UserEntity owner) {
+    public SongEntity(String title, String owner) {
         this.title = title;
         this.owner = owner;
     }
 
-    public SongEntity(Long id, String title, UserEntity owner) {
+    public SongEntity(Long id, String title, String owner) {
         this.id = id;
         this.title = title;
         this.owner = owner;
@@ -45,8 +48,8 @@ public class SongEntity {
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
-    public UserEntity getOwner() { return owner; }
-    public void setOwner(UserEntity owner) { this.owner = owner; }
+    public String getOwner() { return owner; }
+    public void setOwner(String ownerId) { this.owner = ownerId; }
 
     // ----- Utility Methods -----
     @Override
@@ -54,7 +57,7 @@ public class SongEntity {
         return "SongEntity{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", owner=" + (owner != null ? owner.getUsername() : "none") +
+                ", owner_id=" + (owner != null ? owner : "none") +
                 '}';
     }
 

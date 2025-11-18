@@ -1,4 +1,4 @@
-package com.music_server.mvp.controllers;
+/* package com.music_server.mvp.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +58,13 @@ public class UserController {
         return new ResponseEntity<>(users.stream().map(userMapper::mapTo).collect(Collectors.toList()), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/me")
+    public ResponseEntity<UserDto> getUser(@AuthenticationPrincipal MusicUserDetails userDetails){
+        UserEntity userEntity = userDetails.getUserEntity();
+        UserDto userDto = userMapper.mapTo(userEntity);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+
     @GetMapping(path = "/{id}")
     public ResponseEntity<UserDto> findById(@PathVariable("id") Long id){
         Optional<UserEntity> user = userService.findById(id);
@@ -109,4 +116,4 @@ public class UserController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
 
     }
-}
+} */

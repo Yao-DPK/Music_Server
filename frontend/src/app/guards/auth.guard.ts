@@ -3,30 +3,19 @@ import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { TokenService } from '../services/token.service';
 import { catchError, map, of } from 'rxjs';
+import { KeycloakService } from '../services/keycloak/keycloak.service';
+import { isPlatformBrowser } from '@angular/common';
 
 export const authGuard: CanActivateFn = () => {
-  const tokenService = inject(TokenService);
+  const keycloakService = inject(KeycloakService);
   const authService = inject(AuthService);
   const router = inject(Router);
-  const token = tokenService.getAccessToken();
 
-  // ✅ Token valid
-  if (token && !tokenService.isTokenExpired(token)) {
-    return true;
-  }
+  if (isPlatformBrowser(keycloakService['platformId'])) {
+    if (!keycloakService.keycloak || keycloakService.keycloak.isTokenExpired()) {
+        return router.navigate(['/login']);
+    }
+}
 
-  if (token && tokenService.isTokenExpired(token)) {
-    // ⚙️ Token expired → try refresh
-    return authService.refreshToken().pipe(
-      map(() => true),
-      catchError(() => {
-        authService.logout();
-        router.navigate(['/login']);
-        return of(false);
-      })
-    );
-  }
-
-  router.navigate(['/login']);
-    return false;
+return true;
 };

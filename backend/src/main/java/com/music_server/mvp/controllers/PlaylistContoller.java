@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,19 +44,17 @@ public class PlaylistContoller {
     
 
     @PostMapping(path = "/me")
-    public ResponseEntity createPlaylist(@AuthenticationPrincipal MusicUserDetails userDetails, @Valid @RequestBody PlaylistDto playlistDto){
+    public ResponseEntity createPlaylist(@AuthenticationPrincipal MusicUserDetails userDetails, @Valid @RequestBody PlaylistDto playlistDto, Authentication connectedUser){
 
         PlaylistEntity playlistEntity = playlistMapper.mapFrom(playlistDto);
-        UserEntity creatorReference = new UserEntity();
-        creatorReference.setId(userDetails.getId()); // juste l'id
-        playlistEntity.setCreator(creatorReference);
+        playlistEntity.setCreator(connectedUser.getName());
         PlaylistEntity savedPlaylist = playlistService.create(playlistEntity);
         return new ResponseEntity<>(playlistMapper.mapTo(savedPlaylist), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/me")
-    public ResponseEntity<List<PlaylistDto>> getUsersPlaylists(@AuthenticationPrincipal MusicUserDetails userDetails){
-        List<PlaylistEntity> playlists = playlistService.findUsersPlaylistsById(userDetails.getId());
+    public ResponseEntity<List<PlaylistDto>> getUsersPlaylists(@AuthenticationPrincipal MusicUserDetails userDetails, Authentication connectedUser){
+        List<PlaylistEntity> playlists = playlistService.findUsersPlaylistsByUsername(connectedUser.getName());
         return new ResponseEntity<>(playlists.stream().map(playlistMapper::mapTo).collect(Collectors.toList()), HttpStatus.OK);
     }
 }

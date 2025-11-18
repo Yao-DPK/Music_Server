@@ -1,0 +1,16 @@
+<p>test-pages works!</p>
+
+
+<input type="file" class="file-input" (change)="onFileSelected($event)" #fileInput>
+
+<div class="page-container">
+    <div><app-playlist></app-playlist></div>
+    <div><app-player></app-player></div>
+    <div><app-playlist-info [playlistId]="current_playlist_id"></app-playlist-info></div>
+</div>
+
+<div class="file-upload">
+
+    <button class="upload-btn" (click)="fileInput.click()"> CLick Me to Upload</button> <br>
+
+</div>

@@ -1,1 +1,25 @@
-<p>playlist-info works!</p>
+<div *ngIf="playlist" class="playlist-info">
+    <h2>{{ playlist.title }}</h2>
+    <p>Created: {{ playlist.createdAt }}</p>
+    <p>Total Songs: {{ playlist.songs.length }}</p>
+  
+    <!-- Add new song -->
+    <div class="add-song">
+      <input type="text" placeholder="Song title" [(ngModel)]="newSongTitle">
+      <button (click)="addSong()">Add Song</button>
+    </div>
+  
+    <!-- Search songs -->
+    <div class="search-song">
+      <input type="text" placeholder="Search songs" [formControl]="searchControl">
+    </div>
+  
+    <!-- List songs -->
+    <ul>
+      <li *ngFor="let song of playlist.songs">
+        {{ song.title }} 
+        <button (click)="removeSong(song.id)">Remove</button>
+      </li>
+    </ul>
+  </div>
+  

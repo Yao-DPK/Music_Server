@@ -16,7 +16,8 @@ import { TokenService } from '../../services/token.service';
   providers:[AuthService]
 })
 export class LoginFormComponent {
-
+  
+  
   isLogin = signal(true);
   message = signal('');
   showsToast = signal(false);
@@ -69,7 +70,7 @@ export class LoginFormComponent {
       console.log("Resultat: ", res);
       this.tokenService.setAccessToken(res.token);
       this.showSuccess("Login Successful");
-      this.router.navigate(['/home'])
+      this.router.navigate(['/home']);
     })
   }
 

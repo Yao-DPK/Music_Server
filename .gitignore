@@ -7,7 +7,7 @@ lifecycle.json
 
 ## Environment ## 
 *.env
-docker-compose.dev.yml
+config
 env_files
 workspaces
 db

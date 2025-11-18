@@ -13,7 +13,6 @@ public class UserDto {
     public UserDto() {
     }
 
-    
 
     public UserDto(Long id, String username, String password) {
         this.id = id;

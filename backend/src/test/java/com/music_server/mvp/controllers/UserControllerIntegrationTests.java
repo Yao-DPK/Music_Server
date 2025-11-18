@@ -1,4 +1,4 @@
-package com.music_server.mvp.controllers;
+/* package com.music_server.mvp.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -193,3 +193,4 @@ public class UserControllerIntegrationTests {
     }
 
 }
+ */

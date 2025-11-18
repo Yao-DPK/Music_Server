@@ -1,4 +1,4 @@
-package com.music_server.mvp.services;
+/* package com.music_server.mvp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,3 +29,4 @@ public class MusicUserDetailsService implements UserDetailsService {
     }
     
 }
+ */

@@ -1,0 +1,29 @@
+@startuml
+title Système de réputation Influx Link
+
+actor "Influenceur" as I
+actor "Marque" as M
+participant "Système d'XP" as XP
+participant "Algorithme de Pondération" as ALGO
+participant "Base de données Réputation" as DB
+participant "Modération" as MOD
+
+I -> XP : Actions (réponse rapide, profil vérifié, etc.)
+M -> XP : Feedbacks / Signalements
+XP -> ALGO : Transfert des données brutes
+ALGO -> ALGO : Pondération (XP du votant, corrélation, abus)
+ALGO -> DB : Mise à jour du score XP
+DB -> XP : Retour du score pondéré
+XP -> I : Mise à jour visibilité
+XP -> M : Mise à jour crédibilité marque
+ALGO -> MOD : Alerte anomalies ou abus
+MOD -> DB : Validation ou correction manuelle
+
+note right of ALGO
+Poids dynamique :
+- Crédibilité du votant
+- Historique d’abus
+- Corrélation de signalements
+end note
+
+@enduml

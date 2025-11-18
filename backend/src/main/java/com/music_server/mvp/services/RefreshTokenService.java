@@ -1,4 +1,4 @@
-package com.music_server.mvp.services;
+/* package com.music_server.mvp.services;
 
 import java.util.Optional;
 
@@ -14,3 +14,4 @@ public interface RefreshTokenService extends GenericService<RefreshTokenEntity, 
     int deleteByUserId(Long userId);
     String generateRefreshToken();
 }
+ */

@@ -1,4 +1,4 @@
-package com.music_server.mvp.services.impl;
+/* package com.music_server.mvp.services.impl;
 
 import org.springframework.stereotype.Service;
 
@@ -28,15 +28,15 @@ public class RefreshTokenServiceImpl extends GenericServiceImpl<RefreshTokenEnti
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    //private final PasswordEncoder passwordEncoder;
 
     public RefreshTokenServiceImpl(RefreshTokenRepository repository,
-                               UserRepository userRepository,
+                               UserRepository userRepository
                                PasswordEncoder passwordEncoder) {
         super(repository);
         this.refreshTokenRepository = repository;
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        //this.passwordEncoder = passwordEncoder;
     }
 
     public String generateRefreshToken() {
@@ -46,7 +46,7 @@ public class RefreshTokenServiceImpl extends GenericServiceImpl<RefreshTokenEnti
     public RefreshTokenEntity createRefreshToken(Long userId) {
 
         RefreshTokenEntity existing = refreshTokenRepository.findByUserId(userId).orElseThrow();
-        String hashedRefreshToken = passwordEncoder.encode(generateRefreshToken());
+        String hashedRefreshToken = generateRefreshToken();
         if (existing != null) {
             existing.setToken(hashedRefreshToken);
             existing.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
@@ -91,3 +91,4 @@ public class RefreshTokenServiceImpl extends GenericServiceImpl<RefreshTokenEnti
     
 
 }
+ */

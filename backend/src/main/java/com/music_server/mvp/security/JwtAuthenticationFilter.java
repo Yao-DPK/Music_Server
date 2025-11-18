@@ -1,4 +1,4 @@
-package com.music_server.mvp.security;
+/* package com.music_server.mvp.security;
 
 import java.io.IOException;
 
@@ -14,6 +14,7 @@ import com.music_server.mvp.services.AuthService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -32,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             throws ServletException, IOException {
         try {
 
-            String token = extractToken(request);
+            String token = extractAccessTokenFromCookies(request);
         if(token != null){
             UserDetails userDetails = authService.validateToken(token);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -52,12 +53,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         filterChain.doFilter(request, response);
     }
 
-    private String extractToken(HttpServletRequest request){
-        String bearerToken = request.getHeader("Authorization");
-        if(bearerToken != null && bearerToken.startsWith("Bearer ")){
-            return bearerToken.substring(7);
+    private String extractAccessTokenFromCookies(HttpServletRequest request) {
+        if (request.getCookies() == null) return null;
+
+        for (Cookie c : request.getCookies()) {
+            if (c.getName().equals("access_token")) {
+                return c.getValue();
+            }
         }
         return null;
     }
 
+
 }
+ */

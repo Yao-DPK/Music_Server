@@ -10,6 +10,5 @@ public interface PlaylistService extends GenericService<PlaylistEntity, Long> {
     
     PlaylistEntity partialUpdate(Long id, PlaylistEntity entity);
 
-    List<PlaylistEntity> findUsersPlaylistsById(Long userId);
-    List<PlaylistEntity> findUsersPlaylistsByUsername(String username);
+    List<PlaylistEntity> findUsersPlaylistsByUsername(String creator);
 }

@@ -31,3 +31,12 @@ security:
     refreshExpirationMs: 604800000 # 7 days
 server:
   port: 8087
+
+keycloak:
+  realm : music-app
+  auth-server-url: http://localhost:8080
+  resource: angular-client
+  security-constraints[0]:
+    authRoles[0]: USER  
+    securityCollections[0]:
+      patterns: /api/*

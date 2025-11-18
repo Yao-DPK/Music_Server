@@ -1,4 +1,4 @@
-package com.music_server.mvp.services.impl;
+/* package com.music_server.mvp.services.impl;
 
 import java.security.Key;
 import java.sql.Date;
@@ -28,18 +28,18 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class AuthServiceImpl implements AuthService{
     
-    private final AuthenticationManager authenticationManager;
+    //private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
+    //private final PasswordEncoder passwordEncoder;
     
 
     @Autowired
     public AuthServiceImpl(AuthenticationManager authenticationManager, UserDetailsService userDetailsService, UserService userService, PasswordEncoder passwordEncoder){
-        this.authenticationManager = authenticationManager;
+        //this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
+        //this.passwordEncoder = passwordEncoder;
     }
 
     @Value("${security.jwt.secret}")
@@ -52,9 +52,9 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public UserDetails authenticate(String username, String password) {
-        authenticationManager.authenticate(
+         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(username, password)
-            );
+            ); 
         return userDetailsService.loadUserByUsername(username);
 
     }
@@ -88,7 +88,7 @@ public class AuthServiceImpl implements AuthService{
 
         UserEntity newUser = new UserEntity();
         newUser.setUsername(username);
-        newUser.setPassword(passwordEncoder.encode(password));
+        newUser.setPassword(password);
 
         userService.create(newUser);
     }
@@ -112,3 +112,4 @@ public class AuthServiceImpl implements AuthService{
 
     
 }
+ */

@@ -15,9 +15,12 @@ public class PlaylistEntity {
     private String title;
 
     // Plusieurs playlists peuvent appartenir à un même utilisateur
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    /* @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")  // Clé étrangère vers User
-    private UserEntity creator;
+    private UserEntity creator; */
+
+    @Column(name= "creator")
+    private String creator;
 
     // Une playlist contient plusieurs items
     @OneToMany(mappedBy = "playlist", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -31,7 +34,7 @@ public class PlaylistEntity {
         this.title = title;
     }
 
-    public PlaylistEntity(String title, UserEntity creator) {
+    public PlaylistEntity(String title, String creator) {
         this.title = title;
         this.creator = creator;
     }
@@ -43,8 +46,8 @@ public class PlaylistEntity {
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
-    public UserEntity getCreator() { return creator; }
-    public void setCreator(UserEntity creator) { this.creator = creator; }
+    public String getCreator() { return creator; }
+    public void setCreator(String creator) { this.creator = creator; }
 
     public List<PlaylistItemEntity> getItems() { return items; }
     public void setItems(List<PlaylistItemEntity> items) { this.items = items; }

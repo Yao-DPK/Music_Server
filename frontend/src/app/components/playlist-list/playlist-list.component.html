@@ -1,0 +1,22 @@
+<div class="playlist-container">
+    <h2>My Playlists</h2>
+  
+    <!-- Add new playlist -->
+    <div class="add-playlist">
+      <input type="text" placeholder="New playlist title" [(ngModel)]="newPlaylistTitle">
+      <button (click)="addPlaylist()">Add</button>
+    </div>
+  
+    <!-- Search playlists -->
+    <div class="search-playlist">
+      <input type="text" placeholder="Search playlists" [formControl]="searchControl">
+    </div>
+  
+    <!-- List playlists -->
+    <ul class="playlist-list">
+      <li *ngFor="let playlist of playlists">
+        {{ playlist.title }}
+      </li>
+    </ul>
+  </div>
+  

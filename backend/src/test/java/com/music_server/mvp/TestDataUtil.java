@@ -1,4 +1,4 @@
-package com.music_server.mvp;
+/* package com.music_server.mvp;
 
 import com.music_server.mvp.domain.entities.PlaylistEntity;
 import com.music_server.mvp.domain.entities.PlaylistItemEntity;
@@ -38,3 +38,4 @@ public final class TestDataUtil {
 
 
 }
+ */

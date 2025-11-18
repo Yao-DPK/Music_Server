@@ -1,0 +1,11 @@
+{
+    "files.exclude": {
+      "frontend": true,
+      "backend": true,
+    },
+    "search.exclude": {
+      "frontend": true,
+      "backend": true,
+    }
+  }
+  

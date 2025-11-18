@@ -12,20 +12,10 @@ import { AuthService } from './services/auth.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit{
+export class AppComponent{
   title = 'Pyke';
   purpose = "Pyke";
 
   constructor(private authService: AuthService) {}
-
-
-  ngOnInit() {
-    // Attempt silent refresh at startup
-    this.authService.refreshToken().subscribe({
-      next: () => console.log('Token refreshed'),
-      error: () => console.log('No valid refresh token, user must log in')
-    });
-
     
-}
 }

@@ -13,12 +13,12 @@ public class SongDto {
     @NotBlank(message = "Song title is required")
     private String title;
 
-    private UserDto owner;
+    private String owner;
 
     public SongDto() {
     }
 
-    public SongDto(String title, UserDto owner) {
+    public SongDto(String title, String owner) {
         this.title = title;
         this.owner = owner;
     }
@@ -28,7 +28,7 @@ public class SongDto {
         this.title = title;
     }
 
-    public SongDto(Long id, String title, UserDto owner) {
+    public SongDto(Long id, String title, String owner) {
         this.id = id;
         this.title = title;
         this. owner = owner;
@@ -50,11 +50,11 @@ public class SongDto {
         this.title = title;
     }
 
-    public UserDto getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public void setOwner(UserDto owner) {
+    public void setOwner(String owner) {
         this. owner = owner;
     }
 

@@ -1,4 +1,4 @@
-package com.music_server.mvp.services.impl;
+/* package com.music_server.mvp.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,3 +43,4 @@ public class UserServiceImpl extends GenericServiceImpl<UserEntity, Long, UserRe
         return repository.existsByUsername(username);
     }
 }
+ */

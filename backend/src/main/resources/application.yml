@@ -34,3 +34,17 @@ security:
 
 server:
   port: 8087
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: true
+
+keycloak:
+  realm : music-app
+  auth-server-url: http://localhost:8080
+  resource: angular-client
+  security-constraints[0]:
+    authRoles[0]: USER  
+    securityCollections[0]:
+      patterns: /api/*

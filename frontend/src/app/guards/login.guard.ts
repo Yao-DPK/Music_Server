@@ -1,14 +1,13 @@
 import { CanActivateFn, Router } from '@angular/router';
-import { TokenService } from '../services/token.service';
 import { inject } from '@angular/core';
+import { KeycloakService } from '../services/keycloak/keycloak.service';
 
 export const loginGuard: CanActivateFn = () => {
   const router = inject(Router);
-  const tokenService = inject(TokenService);
-  const token = tokenService.getAccessToken();
+  const keycloakService = inject(KeycloakService);
 
   // If user already authenticated → go home
-  if (token && !tokenService.isTokenExpired(token)) {
+  if (!keycloakService.keycloak?.isTokenExpired()) {
     router.navigate(['/home']);
     return false;
   }
