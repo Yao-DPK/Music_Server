@@ -1,19 +1,16 @@
 import { Component, inject, signal } from '@angular/core';
 import {ReactiveFormsModule, FormControl, FormGroup, Validators, ValidatorFn, AbstractControl, ValidationErrors} from '@angular/forms'
-import { LoginService } from '../../services/login.service';
 import { catchError, pipe } from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
 import { ToastComponent } from "../toast/toast.component";
-import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-login-form',
   imports: [ReactiveFormsModule],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss',
-  providers:[AuthService]
+  providers:[]
 })
 export class LoginFormComponent {
   
@@ -56,48 +53,15 @@ export class LoginFormComponent {
   
 
   onLogin(){
-    this.authService
-    .login(this.loginForm.value.username!, this.loginForm.value.password!)
-    .pipe(
-      catchError((err) => {
-        console.log(err.error.message);
-        this.message.set(err.error.message);
-        this.showError(err.error.message);
-        throw err;
-      })
-    )
-    .subscribe((res) => {
-      console.log("Resultat: ", res);
-      this.tokenService.setAccessToken(res.token);
-      this.showSuccess("Login Successful");
-      this.router.navigate(['/home']);
-    })
+    console.log("Login");
   }
 
   onRegister(){
-    this.authService
-    .register(this.registerForm.value.username!, this.registerForm.value.password!)
-    .pipe(
-      catchError((err) => {
-        console.log(err);
-        this.showError(err.error.message);
-        throw err;
-      })
-    )
-    .subscribe((res) => {
-      console.log("Resultat: ", res)
-      this.showSuccess("Registration Successful, You may login");
-      this.isLogin.set(true)
-    })
+    console.log("Register");
   }
 
-  onLogout(){
-    this.authService.logout();
-  }
-
-  authService = inject(AuthService)
   toastService = inject(ToastService)
-  tokenService = inject(TokenService)
+
   
   showSuccess(message: string) {
     this.toastService.show(message, 'success');

@@ -4,10 +4,18 @@ $error-color: #e63946;
 $info-color: rgb(0, 132, 255);
 $radius: 1rem;
 $shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-
+$gap: 2rem;
+$bg-light: #f5f6fa;
+$text-dark: #111;
 
 .file-input{
     display: none
+}
+
+.file-upload{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .upload-btn{
@@ -15,17 +23,69 @@ $shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     border: 1rem;
     background-color: $primary-color;
     transition: background-color 0.3s ease;
+    margin: auto;
 
     &:hover{
         background-color: green;
     }
 }
 
-.page-container{
+.player-container{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
     
 }
 
+.hero-section {
+    text-align: center;
+    margin-bottom: $gap;
+
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: $primary-color;
+      margin-bottom: 1rem;
+      text-decoration: underline;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: $text-dark;
+    }
+  }
+
+.player-content{
+    display: flex;
+    gap: $gap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+
+    .card {
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: $radius;
+        box-shadow: $shadow;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+  
+        .card-title {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+          color: $primary-color;
+        }
+  
+        .card-text {
+          font-size: 1rem;
+          color: $text-dark;
+        }
+      }
+}

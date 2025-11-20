@@ -1,16 +1,22 @@
-<p>test-pages works!</p>
 
 
-<input type="file" class="file-input" (change)="onFileSelected($event)" #fileInput>
+<div class="player-container">
 
-<div class="page-container">
-    <div><app-playlist></app-playlist></div>
-    <div><app-player></app-player></div>
-    <div><app-playlist-info [playlistId]="current_playlist_id"></app-playlist-info></div>
+    <section class="hero-section">
+        <h1 class="hero-title"> Player </h1>
+    </section>
+
+    <section class="player-content">
+        <div class="card"><app-playlist (current_playlist_id)="onPlaylistChange($event)" ></app-playlist></div>
+        <div class="card"><app-player></app-player></div>
+        <div class="card"><app-playlist-info  [playlistId]="current_playlist_id()"></app-playlist-info></div>
+
+        <input type="file" class="file-input" (change)="onFileSelected($event)" #fileInput>
+
+        <div class="file-upload">
+            <button class="upload-btn" (click)="fileInput.click()"> Click Me to Upload</button> <br>
+        </div>
+    </section>
+    
 </div>
 
-<div class="file-upload">
-
-    <button class="upload-btn" (click)="fileInput.click()"> CLick Me to Upload</button> <br>
-
-</div>

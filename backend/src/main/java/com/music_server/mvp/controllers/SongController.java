@@ -80,11 +80,10 @@ public class SongController {
     }
 
     @GetMapping(path = "/me")
-    public ResponseEntity<List<SongDto>> getUsersSongs(/* @AuthenticationPrincipal MusicUserDetails userDetails,  */
-    Authentication connectedUser)
+    public ResponseEntity<List<SongDto>> getUsersSongs(Authentication connectedUser)
     {   
-        System.out.println("Songs Requested");
         List<SongEntity> songs = songService.findUsersSongsByUsername(connectedUser.getName());
+        System.out.printf("Playlists Requested by user: %s", songs.stream().map(songMapper::mapTo).collect(Collectors.toList()));
         return new ResponseEntity<>(songs.stream().map(songMapper::mapTo).collect(Collectors.toList()), HttpStatus.OK);
     }
 }

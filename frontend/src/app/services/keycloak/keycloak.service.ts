@@ -22,7 +22,7 @@ export class KeycloakService {
     })
     
     if(authenticated){
-      console.log('User Authenticated');
+      //console.log('User Authenticated');
       this._profile = (await this.keycloak?.loadUserProfile()) as UserProfile;
       this._profile.token = this._keycloak?.token;
     }
@@ -65,7 +65,13 @@ export class KeycloakService {
     });
   }
 
-
+  getUserName(){
+    if (!isPlatformBrowser(this.platformId) || !this.keycloak) {
+      return;
+    }
+    return this.keycloak.tokenParsed?this.keycloak.tokenParsed["preferred_username"]: '';
+    
+  }
   
   get keycloak(){
     if(!this._keycloak){

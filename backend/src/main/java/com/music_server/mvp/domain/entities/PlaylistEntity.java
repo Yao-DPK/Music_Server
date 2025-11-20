@@ -2,6 +2,7 @@ package com.music_server.mvp.domain.entities;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -14,11 +15,6 @@ public class PlaylistEntity {
 
     private String title;
 
-    // Plusieurs playlists peuvent appartenir à un même utilisateur
-    /* @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "user_id")  // Clé étrangère vers User
-    private UserEntity creator; */
-
     @Column(name= "creator")
     private String creator;
 
@@ -26,6 +22,7 @@ public class PlaylistEntity {
     @OneToMany(mappedBy = "playlist", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("position ASC")
     private List<PlaylistItemEntity> items = new ArrayList<>();
+
 
     // ----- Constructors -----
     public PlaylistEntity() {}

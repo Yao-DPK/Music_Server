@@ -1,6 +1,8 @@
 package com.music_server.mvp.controllers;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,7 @@ public class PlaylistContoller {
     
 
     @PostMapping(path = "/me")
-    public ResponseEntity createPlaylist(@AuthenticationPrincipal MusicUserDetails userDetails, @Valid @RequestBody PlaylistDto playlistDto, Authentication connectedUser){
+    public ResponseEntity createPlaylist(@Valid @RequestBody PlaylistDto playlistDto, Authentication connectedUser){
 
         PlaylistEntity playlistEntity = playlistMapper.mapFrom(playlistDto);
         playlistEntity.setCreator(connectedUser.getName());
@@ -53,9 +55,18 @@ public class PlaylistContoller {
     }
 
     @GetMapping(path = "/me")
-    public ResponseEntity<List<PlaylistDto>> getUsersPlaylists(@AuthenticationPrincipal MusicUserDetails userDetails, Authentication connectedUser){
-        List<PlaylistEntity> playlists = playlistService.findUsersPlaylistsByUsername(connectedUser.getName());
-        return new ResponseEntity<>(playlists.stream().map(playlistMapper::mapTo).collect(Collectors.toList()), HttpStatus.OK);
-    }
-}
+    public ResponseEntity<List<PlaylistDto>> getUsersPlaylists(Authentication connectedUser){
+        List<PlaylistEntity> playlists =
+            Optional.ofNullable(
+                playlistService.findUsersPlaylistsByUsername(connectedUser.getName())
+            ).orElse(Collections.emptyList());
 
+        List<PlaylistDto> result = playlists.stream()
+            .map(playlistMapper::mapTo)
+            .collect(Collectors.toList());
+
+        System.out.printf("Playlists Requested by user: %s%n", result);
+
+        return ResponseEntity.ok(result);
+}
+}

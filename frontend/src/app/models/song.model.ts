@@ -1,7 +1,7 @@
 import { User } from "./user.model";
 
 export class Song {
-    id: string;             // identifiant unique (UUID ou DB id)
+    id?: string;             // identifiant unique (UUID ou DB id)
     title: string;          // titre de la chanson
     owner: string;         // album (optionnel)
     

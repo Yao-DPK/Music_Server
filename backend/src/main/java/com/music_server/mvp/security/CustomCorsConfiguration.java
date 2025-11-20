@@ -19,9 +19,6 @@ public class CustomCorsConfiguration implements CorsConfigurationSource {
     @Override
     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
         CorsConfiguration config = new CorsConfiguration();
-
-        System.out.println(frontend_url);
-        System.out.println(keycloak_url);
         config.setAllowedOrigins(List.of("http://localhost:4200", "http://127.0.0.1:4200", frontend_url, keycloak_url));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setAllowedHeaders(List.of("*"));

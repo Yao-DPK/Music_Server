@@ -3,8 +3,6 @@ import {
   HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, catchError, switchMap, throwError } from 'rxjs';
-import { AuthService } from '../services/auth.service';
-import { TokenService } from '../services/token.service';
 import { Router } from '@angular/router';
 import { KeycloakService } from '../services/keycloak/keycloak.service';
 
@@ -13,7 +11,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private keycloakService = inject(KeycloakService);
   constructor() {
-    console.log('AuthInterceptor instantiated');
+    //console.log('AuthInterceptor instantiated');
   }
   
 

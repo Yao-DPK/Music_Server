@@ -13,5 +13,5 @@ import com.music_server.mvp.domain.entities.SongEntity;
 public interface PlaylistRepository extends JpaRepository<PlaylistEntity, Long>{
 
     List<PlaylistEntity> findAllByCreator(String creator);
-
+ 
 }

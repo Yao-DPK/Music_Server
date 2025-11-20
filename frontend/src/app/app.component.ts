@@ -4,8 +4,6 @@ import { LoginFormComponent } from "./components/login-form/login-form.component
 import { HeaderComponent } from "./components/header/header.component";
 import { ToastComponent } from "./components/toast/toast.component";
 import { ToastService } from './services/toast.service';
-import { AuthService } from './services/auth.service';
-
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, HeaderComponent, ToastComponent],
@@ -16,6 +14,6 @@ export class AppComponent{
   title = 'Pyke';
   purpose = "Pyke";
 
-  constructor(private authService: AuthService) {}
+  constructor() {}
     
 }

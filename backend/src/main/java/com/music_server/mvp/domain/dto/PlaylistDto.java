@@ -10,23 +10,23 @@ public class PlaylistDto {
     @NotBlank(message = " Playlist title is required")
     private String title;
 
-    private UserDto creator;
+    private String creator;
 
-    private List<PlaylistItemDto> items;
+    private List<PlaylistItemDto> songs;
 
 
     public PlaylistDto() {
     }
 
-    public PlaylistDto(Long id, String title, UserDto creator, List<PlaylistItemDto> items) {
+    public PlaylistDto(Long id, String title, String creator, List<PlaylistItemDto> songs) {
         this.id = id;
         this.title = title;
         this.creator = creator;
-        this.items = items;
+        this.songs = songs;
     }
 
 
-    public PlaylistDto(String title, UserDto creator) {
+    public PlaylistDto(String title, String creator) {
         this.title = title;
         this.creator = creator;
     }
@@ -52,20 +52,20 @@ public class PlaylistDto {
         this.title = title;
     }
 
-    public UserDto getCreator() {
+    public String getCreator() {
         return creator;
     }
 
-    public void setCreator(UserDto creator) {
+    public void setCreator(String creator) {
         this.creator = creator;
     }
 
     public List<PlaylistItemDto> getItems() {
-        return items;
+        return songs;
     }
 
     public void setItems(List<PlaylistItemDto> items) {
-        this.items = items;
+        this.songs = items;
     }
 
     

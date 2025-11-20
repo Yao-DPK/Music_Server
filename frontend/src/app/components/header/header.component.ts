@@ -1,7 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TokenService } from '../../services/token.service';
-import { AuthService } from '../../services/auth.service';
 import { KeycloakService } from '../../services/keycloak/keycloak.service';
 
 @Component({
@@ -12,8 +10,6 @@ import { KeycloakService } from '../../services/keycloak/keycloak.service';
 })
 export class HeaderComponent {
   title=signal("pyke's player");
-  tokenService = inject(TokenService);
-  authService = inject(AuthService)
 
   constructor(private keycloakService: KeycloakService ) {}
 
