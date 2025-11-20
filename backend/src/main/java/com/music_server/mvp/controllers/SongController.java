@@ -83,7 +83,7 @@ public class SongController {
     public ResponseEntity<List<SongDto>> getUsersSongs(Authentication connectedUser)
     {   
         List<SongEntity> songs = songService.findUsersSongsByUsername(connectedUser.getName());
-        System.out.printf("Playlists Requested by user: %s", songs.stream().map(songMapper::mapTo).collect(Collectors.toList()));
+        //System.out.printf("Playlists Requested by user: %s", songs.stream().map(songMapper::mapTo).collect(Collectors.toList()));
         return new ResponseEntity<>(songs.stream().map(songMapper::mapTo).collect(Collectors.toList()), HttpStatus.OK);
     }
 }
