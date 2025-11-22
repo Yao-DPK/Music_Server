@@ -1,11 +1,13 @@
 package com.music_server.mvp.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.validation.constraints.NotBlank;
 
 public class PlaylistItemDto {
     private Long id;
-
-    private PlaylistDto playlist;
+    
+    private Long playlistId;
 
     private SongDto song;
     
@@ -13,9 +15,9 @@ public class PlaylistItemDto {
 
     
 
-    public PlaylistItemDto(Long id, PlaylistDto playlist, SongDto song, int position) {
+    public PlaylistItemDto(Long id, Long playlistId, SongDto song, int position) {
         this.id = id;
-        this.playlist = playlist;
+        this.playlistId = playlistId;
         this.song = song;
         this.position = position;
     }
@@ -31,12 +33,12 @@ public class PlaylistItemDto {
         this.id = id;
     }
 
-    public PlaylistDto getPlaylist() {
-        return playlist;
+    public Long getPlaylistId() {
+        return playlistId;
     }
 
-    public void setPlaylist(PlaylistDto playlist) {
-        this.playlist = playlist;
+    public void setPlaylistId(Long playlistId) {
+        this.playlistId = playlistId;
     }
 
     public SongDto getSong() {
@@ -46,6 +48,16 @@ public class PlaylistItemDto {
     public void setSong(SongDto song) {
         this.song = song;
     }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    
 
     
 }

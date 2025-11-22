@@ -16,6 +16,8 @@ $text-dark: #111;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: auto;
+    margin: auto;
 }
 
 .upload-btn{
@@ -58,6 +60,9 @@ $text-dark: #111;
 
 .player-content{
     display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 80vh;
     gap: $gap;
     flex-direction: row;
     align-items: center;
@@ -88,4 +93,25 @@ $text-dark: #111;
           color: $text-dark;
         }
       }
+      
+    .playlist-list-card{
+      @extend .card;
+      width: 25%;
+      height: 50%;
+    }
+
+    .playlist-info-card{
+      @extend .card;
+      width: 25%;
+      height: 50%;
+    }
+
+    .player-card{
+      @extend .card;
+      width: 25%;
+      height: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 }

@@ -5,7 +5,7 @@ export class Song {
     title: string;          // titre de la chanson
     owner: string;         // album (optionnel)
     
-    constructor(id: string, title: string, owner: string){
+    constructor(title: string, owner: string,id?: string){
         this.id = id;
         this.title = title;
         this.owner = owner

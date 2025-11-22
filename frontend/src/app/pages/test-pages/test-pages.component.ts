@@ -32,7 +32,7 @@ export class TestPagesComponent implements OnInit{
   current_songs: Song[] = [];
 
   ngOnInit() {
-    console.log("StremingPage");
+    //console.log("StremingPage");
     this.keycloakService.getUserName();
     this.audioService.getSongs().subscribe({
       next: (res) => {
@@ -49,7 +49,7 @@ export class TestPagesComponent implements OnInit{
   
 
   uploadSong(body: FormData) {
-    return this.http.post(`${this.apiUrl}/songs/me`, body).pipe(
+    return this.http.post(`${this.apiUrl}/playlists/me/songs`, body).pipe(
       tap(response => console.log('response', response))
     );
   }
@@ -60,7 +60,7 @@ export class TestPagesComponent implements OnInit{
     if (!file) return;
 
     const formData = new FormData();
-    formData.append('file', file);
+    //formData.append('file', file);
     formData.append('title', file.name);
 
     this.uploadSong(formData).subscribe({

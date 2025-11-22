@@ -6,13 +6,13 @@ export class Playlist {
     id?: string;
     title: string;
     creator: string;
-    songs: PlaylistItem[];
+    items: PlaylistItem[];
 
-    constructor(id: string, title: string, creator: string, songs: PlaylistItem[]){
+    constructor(id: string, title: string, creator: string, items: PlaylistItem[]){
       this.id = id;
       this.title = title;
       this.creator = creator;
-      this.songs = songs;
+      this.items = items;
   } 
     
     

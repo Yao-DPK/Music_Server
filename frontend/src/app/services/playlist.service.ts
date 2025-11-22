@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { KeycloakService } from './keycloak/keycloak.service';
+import { PlaylistItem } from '../models/playlistItem.model';
 
 @Injectable({ providedIn: 'root' })
 export class PlaylistService {
@@ -24,7 +25,12 @@ export class PlaylistService {
         .toPromise();
   
       const safeList = Array.isArray(list) ? list : [];
-  
+
+      if (safeList.find(p => p.title == "All Songs") == undefined){
+        this.add("All Songs");
+      }
+      //console.log(`Safe List: ${safeList.find(p => p.title == "All Songs")}` );
+      
       this.playlists.set(safeList.map(dto => Playlist.fromDto(dto)));
 
   
@@ -35,8 +41,10 @@ export class PlaylistService {
   }
 
   // --- GET BY ID ---
-  getById(id: string) {
-    const play = this.playlists().find(p => p.id == id);
+  async getById(id: string) {
+    const play = await this.http
+    .get<Playlist>(`${environment.apiUrl}/playlists/me/${id}`)
+    .toPromise();
     return play ?? this.current_playlist();
   }
   
@@ -65,21 +73,21 @@ export class PlaylistService {
   }
 
 
-  addSongToPlaylist(playlistId: string, song: Song) {
-    /* const playlist = this.playlists.find(p => p.id === playlistId);
+  async addSongToPlaylist(playlistId: string, song: Song) {
+    const playlist = this.getById(playlistId);
     if (playlist) {
-      playlist.songs.push(song);
-      this.playlists$.next(this.playlists);
+      const new_song: PlaylistItem  = PlaylistItem.createPlaylistItem(await playlist, song);
+      (await playlist).items.push(new_song);
       return of(song);
     }
-    return of(undefined as any); */
+    return of(undefined as any);
   }
 
   removeSongFromPlaylist(playlistId: string, songId: string){
-    /* const playlist = this.playlists.find(p => p.id === playlistId);
+    /* const playlist = this.getById(playlistId);
     if (playlist) {
       playlist.songs = playlist.songs.filter(s => s.id !== songId);
-      this.playlists$.next(this.playlists);
+      
     }
     return of(); */
   }

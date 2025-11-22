@@ -13,10 +13,13 @@
     </div>
   
     <!-- List playlists -->
-    <ul class="playlist-list">
-      <li *ngFor="let playlist of filteredPlaylists()" (click)="changeCurrentPlaylistid(playlist.id!)">
-        {{ playlist.title }}
-      </li>
-    </ul>
+    <div class="playlist-list">
+      <ul>
+        <li *ngFor="let playlist of filteredPlaylists()" (click)="changeCurrentPlaylistid(playlist.id!)">
+          {{ playlist.title }}
+        </li>
+      </ul>
+    </div>
+    
   </div>
   

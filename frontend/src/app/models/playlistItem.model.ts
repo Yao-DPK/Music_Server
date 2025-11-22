@@ -4,15 +4,15 @@ import { Song } from "./song.model";
 // src/app/models/playlist.model.ts
 export class PlaylistItem {
     id?: string;
-    playlist: Playlist;
+    playlist: string;
     song: Song;
     position: number;
 
-    constructor(id: string, playlist: Playlist, song: Song, position: number){
-      this.id = id;
+    constructor(playlist: string, song: Song, position: number, id?: string){
       this.playlist = playlist;
       this.song = song;
       this.position = position;
+      this.id = id;
   } 
     
     
@@ -25,6 +25,14 @@ static fromDto(dto: any): PlaylistItem {
     dto.playlist,
     dto.song,
     dto.position
+  );
+}
+
+static createPlaylistItem(playlist: Playlist, song: Song): PlaylistItem {
+  return new PlaylistItem(
+    playlist.id!,
+    song,
+    playlist.items.length
   );
 }
 

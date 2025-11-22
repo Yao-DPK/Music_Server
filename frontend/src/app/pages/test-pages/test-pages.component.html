@@ -7,15 +7,20 @@
     </section>
 
     <section class="player-content">
-        <div class="card"><app-playlist (current_playlist_id)="onPlaylistChange($event)" ></app-playlist></div>
-        <div class="card"><app-player></app-player></div>
-        <div class="card"><app-playlist-info  [playlistId]="current_playlist_id()"></app-playlist-info></div>
+        <div class="playlist-list-card"><app-playlist (current_playlist_id)="onPlaylistChange($event)" ></app-playlist></div>
+        <div class="player-card">
+            <app-player></app-player>
 
-        <input type="file" class="file-input" (change)="onFileSelected($event)" #fileInput>
+                <input type="file" class="file-input" (change)="onFileSelected($event)" #fileInput>
+    
+                <div class="file-upload">
+                    <button class="upload-btn" (click)="fileInput.click()"> Click Me to Upload</button>
+                </div>
+            </div>
 
-        <div class="file-upload">
-            <button class="upload-btn" (click)="fileInput.click()"> Click Me to Upload</button> <br>
-        </div>
+        <div class="playlist-info-card"><app-playlist-info  [playlistId]="current_playlist_id()"></app-playlist-info></div>
+        
+        
     </section>
     
 </div>

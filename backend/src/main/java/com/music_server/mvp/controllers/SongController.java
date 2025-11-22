@@ -46,6 +46,8 @@ public class SongController {
 
     private Mapper<PlaylistEntity, PlaylistDto> playlistMapper;
 
+    
+
     @Autowired
     public SongController(SongService songService, Mapper<SongEntity, SongDto> songMapper){
         this.songService = songService;
@@ -86,4 +88,6 @@ public class SongController {
         //System.out.printf("Playlists Requested by user: %s", songs.stream().map(songMapper::mapTo).collect(Collectors.toList()));
         return new ResponseEntity<>(songs.stream().map(songMapper::mapTo).collect(Collectors.toList()), HttpStatus.OK);
     }
+
+    
 }

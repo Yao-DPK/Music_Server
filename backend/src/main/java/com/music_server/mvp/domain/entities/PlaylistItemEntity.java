@@ -18,6 +18,7 @@ public class PlaylistItemEntity {
     // Plusieurs items appartiennent à une même playlist
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "playlist_id", nullable = false)
+    
     private PlaylistEntity playlist;
 
     // Chaque item référence une seule chanson, mais une chanson peut apparaître dans plusieurs playlists

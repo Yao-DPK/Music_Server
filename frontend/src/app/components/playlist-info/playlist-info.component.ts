@@ -1,9 +1,13 @@
-import { Component, effect, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, computed, effect, Input, OnInit, SimpleChanges } from '@angular/core';
 import { PlaylistService } from '../../services/playlist.service';
 import { Playlist } from '../../models/playlist.model';
 import { Song } from '../../models/song.model';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { KeycloakService } from '../../services/keycloak/keycloak.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { debounceTime } from 'rxjs';
+import { sortBy } from '../../util/utils';
 
 @Component({
   selector: 'app-playlist-info',
@@ -17,31 +21,37 @@ export class PlaylistInfoComponent implements OnInit {
   newSongTitle = '';
   searchControl = new FormControl('');
 
-  constructor(private playlistService: PlaylistService) {
-    effect(() => {
+  searchQuery = toSignal(
+    this.searchControl.valueChanges.pipe(debounceTime(300)),
+    { initialValue: '' }
+  );
+
+
+  // 2. Utilise le signal de query pour filtrer via ton service
+  filteredSongs = () => {
+    const q = this.searchQuery()?.toLowerCase() ?? '';
+    const list = this.playlist!.items.filter(s =>
+      s.song.title.toLowerCase().includes(q)
+    );
+    return list
+  };
+
+  constructor(private playlistService: PlaylistService, private keycloakService: KeycloakService) {
+    this.playlist = this.playlistService.current_playlist();
+  }
+
+  async ngOnInit(): Promise<void> {
+
       const all = this.playlistService.playlists();
       if (all.length === 0) return;
     
-      const pl = this.playlistService.getById(`${this.playlistId}`);
+      const pl = await this.playlistService.getById(`${this.playlistId}`);
       if (pl) {
         // assure que songs est toujours un tableau
-        this.playlist = { ...pl, songs: pl.songs ?? [] };
+        this.playlist = { ...pl, items: pl.items ?? [] };
         console.log("Loaded playlist:", this.playlist);
       }
-    });
-  }
 
-  ngOnInit(): void {
-    
-
-    // Optional: filter songs
-    this.searchControl.valueChanges.subscribe(query => {
-      if (!this.playlist) return;
-      if (!query) return;
-      this.playlist.songs = this.playlist.songs.filter(s =>
-        s.song.title.toLowerCase().includes(query.toLowerCase())
-      );
-    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -50,28 +60,28 @@ export class PlaylistInfoComponent implements OnInit {
     }
   }
 
-  updatePlaylist() {
-    const pl = this.playlistService.getById(this.playlistId);
-    this.playlist = { ...pl, songs: pl?.songs ?? [] };
+  async updatePlaylist() {
+    const pl = await this.playlistService.getById(this.playlistId);
+    this.playlist = { ...pl, items: pl?.items ?? [] };
+    //console.log(`Loaded Playlist : ${JSON.stringify(this.playlist)}`)
   }
 
-  loadPlaylist() {
+  async loadPlaylist() {
     console.log(`Playlist number: ${this.playlistId}`);
     console.log(`Playlist: ${this.playlistService.getById(`1`)}`);
-    this.playlist = this.playlistService.getById(`${this.playlistId}`)!;
+    this.playlist = await this.playlistService.getById(`${this.playlistId}`)!;
   }
 
-  addSong() {
-    /* if (!this.newSongTitle.trim() || !this.playlist) return;
+  async addSong() {
+    if (!this.newSongTitle.trim() || !this.playlist) return;
     const song: Song = {
-      id: Date.now().toString(),
       title: this.newSongTitle.trim(),
-      owner: 'You', // adjust according to your user info
+      owner: this.keycloakService.getUserName(), // adjust according to your user info
     };
-    this.playlistService.addSongToPlaylist(this.playlist.id, song).subscribe(() => {
+    (await this.playlistService.addSongToPlaylist(this.playlist.id!, song)).subscribe(() => {
       this.newSongTitle = '';
       this.loadPlaylist();
-    }); */
+    });
   }
 
   removeSong(songId: string) {
@@ -80,4 +90,5 @@ export class PlaylistInfoComponent implements OnInit {
       this.loadPlaylist();
     }); */
   }
+
 }

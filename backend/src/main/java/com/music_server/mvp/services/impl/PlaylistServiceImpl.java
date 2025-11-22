@@ -65,4 +65,10 @@ public class PlaylistServiceImpl extends GenericServiceImpl<PlaylistEntity, Long
     public List<PlaylistEntity> findUsersPlaylistsByUsername(String creator){
         return repository.findAllByCreator(creator);
     }
+
+    @Override
+    public Optional<PlaylistEntity> findUserPlaylistByTitle(String creator, String title){
+        return repository.findByCreatorAndTitle(creator, title);
+    }
+
 }
