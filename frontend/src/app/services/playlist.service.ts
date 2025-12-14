@@ -26,7 +26,7 @@ export class PlaylistService {
   async loadAll(): Promise<void> {
     try {
       const list = await firstValueFrom(
-        this.http.get<Playlist[]>(`${environment.apiUrl}/playlists/me`)
+        this.http.get<Playlist[]>(`${environment.apiUrl}/playlists/me`), {defaultValue: null}
       );
 
       const playlists = Array.isArray(list)
