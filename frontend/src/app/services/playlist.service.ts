@@ -1,6 +1,6 @@
 // src/app/services/playlist.service.ts
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable, of } from 'rxjs';
 import { Playlist } from '../models/playlist.model';
 import { Song } from '../models/song.model';
 import { map } from 'rxjs/operators';
@@ -11,84 +11,80 @@ import { PlaylistItem } from '../models/playlistItem.model';
 
 @Injectable({ providedIn: 'root' })
 export class PlaylistService {
+
   private http = inject(HttpClient);
-  private keycloakService = inject(KeycloakService);
+  private keycloak = inject(KeycloakService);
 
-  playlists = signal<Playlist[]>([]);
-  current_playlist = signal<Playlist>(this.playlists()[0]);
+  readonly playlists = signal<Playlist[]>([]);
+  currentPlaylistId = signal<string | null>(null);
 
-  // --- GET ALL ---
-  async getAll(): Promise<void> {
+  readonly currentPlaylist = computed(() => {
+    const id = this.currentPlaylistId();
+    return this.playlists().find(p => p.id === id) ?? null;
+  });
+
+  async loadAll(): Promise<void> {
     try {
-      const list = await this.http
-        .get<Playlist[]>(`${environment.apiUrl}/playlists/me`)
-        .toPromise();
-  
-      const safeList = Array.isArray(list) ? list : [];
+      const list = await firstValueFrom(
+        this.http.get<Playlist[]>(`${environment.apiUrl}/playlists/me`)
+      );
 
-      if (safeList.find(p => p.title == "All Songs") == undefined){
-        this.add("All Songs");
+      const playlists = Array.isArray(list)
+        ? list.map(dto => Playlist.fromDto(dto))
+        : [];
+
+      this.playlists.set(playlists);
+      console.log("Received Playlists: ", playlists);
+      if (!this.currentPlaylistId() && playlists.length) {
+        this.currentPlaylistId.set(playlists.find(p => p.title === "All Songs")!.id!);
       }
-      //console.log(`Safe List: ${safeList.find(p => p.title == "All Songs")}` );
-      
-      this.playlists.set(safeList.map(dto => Playlist.fromDto(dto)));
+      console.log("Currently loaded playlist: ", this.currentPlaylist());
 
-  
-    } catch (err) {
-      console.error('Failed to load playlists', err);
-      this.playlists.set([]); // sécurité
+    } catch (e) {
+      console.error('Failed to load playlists', e);
+      this.playlists.set([]);
     }
   }
 
-  // --- GET BY ID ---
-  async getById(id: string) {
-    const play = await this.http
-    .get<Playlist>(`${environment.apiUrl}/playlists/me/${id}`)
-    .toPromise();
-    return play ?? this.current_playlist();
+  setCurrentPlaylist(id: string) {
+    this.currentPlaylistId.set(id);
   }
-  
 
-  // --- SEARCH (computed — réactif et propre) ---
-  search = (query: string) => computed(() =>
-    this.playlists()
-      .filter(p => p.title.toLowerCase().includes(query.toLowerCase()))
-  );
-
-  // --- ADD ---
-  async add(title: string): Promise<void>  {
-    
+  async add(title: string) {
     const payload = {
       title,
-      creator: this.keycloakService.getUserName(),
-      songs: []
+      creator: this.keycloak.getUserName(),
     };
 
-    const created = await this.http
-      .post<Playlist>(`${environment.apiUrl}/playlists/me`, payload)
-      .toPromise();
+    const created = await firstValueFrom(
+      this.http.post<Playlist>(`${environment.apiUrl}/playlists/me`, payload)
+    );
 
-    // mise à jour du signal
-    this.playlists.update(pls => [...pls, Playlist.fromDto(created)]);
+    this.playlists.update(pls => [
+      ...pls,
+      Playlist.fromDto(created)
+    ]);
   }
 
-
-  async addSongToPlaylist(playlistId: string, song: Song) {
-    const playlist = this.getById(playlistId);
-    if (playlist) {
-      const new_song: PlaylistItem  = PlaylistItem.createPlaylistItem(await playlist, song);
-      (await playlist).items.push(new_song);
-      return of(song);
-    }
-    return of(undefined as any);
+  addSong(playlistId: string, song: Song) {
+    this.playlists.update(pls =>
+      pls.map(pl =>
+        pl.id !== playlistId
+          ? pl
+          : {
+              ...pl,
+              items: [
+                ...(pl.items ?? []),
+                PlaylistItem.createPlaylistItem(pl, song)
+              ]
+          }
+      )
+    );
   }
 
-  removeSongFromPlaylist(playlistId: string, songId: string){
-    /* const playlist = this.getById(playlistId);
-    if (playlist) {
-      playlist.songs = playlist.songs.filter(s => s.id !== songId);
-      
-    }
-    return of(); */
-  }
-}
+  searchPlaylists = computed(() => (query: string) =>
+    this.playlists().filter(p =>
+      p.title.toLowerCase().includes(query.toLowerCase())
+    )
+  );
+} 

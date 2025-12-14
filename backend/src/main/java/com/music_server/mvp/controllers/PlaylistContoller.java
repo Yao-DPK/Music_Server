@@ -71,7 +71,7 @@ public class PlaylistContoller {
             .map(playlistMapper::mapTo)
             .collect(Collectors.toList());
 
-        //System.out.printf("Playlists Requested by user: %s%n", result);
+        System.out.printf("Playlists Requested by user: %s%n", result);
 
         return ResponseEntity.ok(result);
 }

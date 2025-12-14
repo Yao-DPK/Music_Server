@@ -1,54 +1,65 @@
 // src/app/services/player.service.ts
-import { Injectable } from '@angular/core';
+import { computed, inject, Injectable, signal, Signal } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Song } from '../models/song.model';
+import { PlaylistItem } from '../models/playlistItem.model';
+import { PlaylistService } from './playlist.service';
+import { Playlist } from '../models/playlist.model';
 //import { Song } from '../models/song.model';
 
 @Injectable({ providedIn: 'root' })
 export class PlayerService {
-  private currentTrackSubject = new BehaviorSubject<Song | null>(null);
-  private isPlayingSubject = new BehaviorSubject<boolean>(false);
-  private queue: Song[] = [];
+  
+  playlistService = inject(PlaylistService);
+  currentSongId = signal<string | null>(null)
+  private isPlaying = signal<boolean>(false);
   private currentIndex = -1;
 
-  constructor() {}
+  readonly queue = computed(() => {
+    if(this.playlistService.currentPlaylist()){
+      return this.playlistService.currentPlaylist()?.items!;
+    } else {
+      return [];
+    }
+  })
+  
+  readonly currentSong = computed(() => {
+    const id = this.currentSongId();
+    return this.queue()!.find(p => p.id === id) ?? null;
+  });
+
 
   // === Observables pour les composants ===
-  getCurrentTrack(): Observable<Song | null> {
-    return this.currentTrackSubject.asObservable();
+  getCurrentTrack(): Signal<PlaylistItem | null> {
+    return this.currentSong;
   }
 
-  getIsPlaying(): Observable<boolean> {
-    return this.isPlayingSubject.asObservable();
+  getIsPlaying(): Signal<boolean> {
+    return this.isPlaying;
   }
 
   // === Contrôles du player ===
   play() {
-    if (this.currentTrackSubject.value) this.isPlayingSubject.next(true);
+    if (this.currentSong()!.song) this.isPlaying.set(true);
   }
 
   pause() {
-    this.isPlayingSubject.next(false);
+    if (this.currentSong()!.song) this.isPlaying.set(false);
   }
 
-  togglePlayPause() {
-    const playing = this.isPlayingSubject.value;
-    this.isPlayingSubject.next(!playing);
-  }
-
-  // === Gestion de la queue ===
-  setQueue(songs: Song[], startIndex: number = 0) {
-    this.queue = songs;
+  /* // === Gestion de la queue ===
+  setQueue(songs: PlaylistItem[], startIndex: number = 0) {
+    this.queue.set(songs);
     this.currentIndex = startIndex;
-    this.currentTrackSubject.next(this.queue[this.currentIndex]);
-    this.isPlayingSubject.next(true);
-  }
+    this.currentSong.set(this.queue()[this.currentIndex]);
+    this.play();
+  } */
 
-  nextTrack() {
+  /* nextTrack() {
     if (this.currentIndex < this.queue.length - 1) {
       this.currentIndex++;
-      this.currentTrackSubject.next(this.queue[this.currentIndex]);
-      this.isPlayingSubject.next(true);
+      this.currentSong.set(this.queue()![this.currentIndex]);
+      this.play();
     } else {
       this.pause(); // fin de la queue
     }
@@ -57,28 +68,28 @@ export class PlayerService {
   prevTrack() {
     if (this.currentIndex > 0) {
       this.currentIndex--;
-      this.currentTrackSubject.next(this.queue[this.currentIndex]);
-      this.isPlayingSubject.next(true);
+      this.currentSong.set(this.queue()![this.currentIndex]);
+      this.play();
     }
   }
 
-  selectTrack(song: Song) {
-    const index = this.queue.findIndex(t => t.id === song.id);
+  selectTrack(id: string) {
+    const index = this.queue()!.findIndex(t => t.id === id);
     if (index !== -1) {
       this.currentIndex = index;
     } else {
-      this.queue.push(song);
+      this.queue().push(song);
       this.currentIndex = this.queue.length - 1;
     }
-    this.currentTrackSubject.next(this.queue[this.currentIndex]);
-    this.isPlayingSubject.next(true);
+    this.currentSong.set(this.queue()[this.currentIndex]);
+    this.play;
   }
 
   // === Reset player ===
   reset() {
-    this.currentTrackSubject.next(null);
-    this.isPlayingSubject.next(false);
-    this.queue = [];
+    this.currentSong.set(this.playlistService.currentPlaylist()!.items[0]);
+    this.pause;
+    this.queue.set([]);
     this.currentIndex = -1;
-  }
+  } */
 }

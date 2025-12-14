@@ -21,7 +21,6 @@ public class PlaylistEntity {
     // Une playlist contient plusieurs items
     @OneToMany(mappedBy = "playlist", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("position ASC")
-    
     private List<PlaylistItemEntity> items = new ArrayList<>();
 
 

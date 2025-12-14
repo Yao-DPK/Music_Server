@@ -15,7 +15,7 @@
     <!-- List playlists -->
     <div class="playlist-list">
       <ul>
-        <li *ngFor="let playlist of filteredPlaylists()" (click)="changeCurrentPlaylistid(playlist.id!)">
+        <li *ngFor="let playlist of filteredPlaylists()" (click)="selectPlaylist(playlist.id!)">
           {{ playlist.title }}
         </li>
       </ul>

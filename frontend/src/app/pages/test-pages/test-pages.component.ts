@@ -28,24 +28,30 @@ export class TestPagesComponent implements OnInit{
   keycloakService = inject(KeycloakService);
   playlistService = inject(PlaylistService);
   apiUrl = environment.apiUrl;
-  current_playlist_id = signal<string>('1');
-  current_songs: Song[] = [];
+  currentPlaylistId = signal<string>('1');
+  currentSongId = signal<string>('1');
+  current_songs= signal<Song[]>([]);
 
   ngOnInit() {
     //console.log("StremingPage");
     this.keycloakService.getUserName();
     this.audioService.getSongs().subscribe({
       next: (res) => {
-        this.current_songs = res.map(dto => Song.fromDto(dto));
-        console.log('Songs loaded', this.current_songs);
+        console.log("Receivd Songs: ", res)
+        this.current_songs.set(res.map(dto => Song.fromDto(dto)));
+        console.log('Songs loaded', this.current_songs());
       },
       error: (err) => console.error('Failed to load songs', err)
     });
   }
 
   onPlaylistChange($event: string) {
-    this.current_playlist_id.set($event);
-    }
+    this.currentPlaylistId.set($event);
+  }
+
+  onSongChange($event: string) {
+    this.currentSongId.set($event);
+  }
   
 
   uploadSong(body: FormData) {

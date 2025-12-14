@@ -7,18 +7,27 @@
     </section>
 
     <section class="player-content">
-        <div class="playlist-list-card"><app-playlist (current_playlist_id)="onPlaylistChange($event)" ></app-playlist></div>
+        <div class="playlist-list-card">
+            <app-playlist (currentPlaylistId)="onPlaylistChange($event)" >
+            </app-playlist>
+        </div>
         <div class="player-card">
-            <app-player></app-player>
+            <app-player [songId]="currentSongId()" [songs]="current_songs"></app-player>
 
-                <input type="file" class="file-input" (change)="onFileSelected($event)" #fileInput>
+            <input
+            type="file"
+            accept="audio/*"
+            aria-label="Upload audio file"
+            class="file-input"
+            (change)="onFileSelected($event)"
+            #fileInput>
     
                 <div class="file-upload">
                     <button class="upload-btn" (click)="fileInput.click()"> Click Me to Upload</button>
                 </div>
             </div>
 
-        <div class="playlist-info-card"><app-playlist-info  [playlistId]="current_playlist_id()"></app-playlist-info></div>
+        <div class="playlist-info-card"><app-playlist-info  [playlistId]="currentPlaylistId" (currentSongId)="onSongChange($event)" ></app-playlist-info></div>
         
         
     </section>

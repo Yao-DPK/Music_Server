@@ -24,7 +24,7 @@ static fromDto(dto: any): Playlist {
     dto.id,
     dto.title,
     dto.creator,
-    dto.songs
+    dto.items
   );
 }
 

@@ -16,13 +16,10 @@ import { title } from 'process';
   imports: [FormsModule, ReactiveFormsModule, CommonModule]
 })
 export class PlaylistListComponent implements OnInit {
-  
-  
-
   playlists : Signal<Playlist[]>;
   searchControl = new FormControl('');
   newPlaylistTitle = signal('');
-  @Output() current_playlist_id = new EventEmitter<string>();
+  @Output() currentPlaylistId = new EventEmitter<string>();
 
   constructor(private playlistService: PlaylistService) {
     this.playlists = this.playlistService.playlists;
@@ -46,14 +43,14 @@ export class PlaylistListComponent implements OnInit {
 
   
   ngOnInit(): void {
-    this.playlistService.getAll();
+    this.playlistService.loadAll();
     //console.log(`Voici la liste actuelle des playlists: ${this.playlistService.playlists()}`);
   }
   
-  changeCurrentPlaylistid(id: string){
-  
-    this.current_playlist_id.emit(id);
-    //return this.playlistService.current_playlist.set(this.playlistService.getById(id));
+  selectPlaylist(id: string){
+    console.log("Changing Playlist");
+    this.currentPlaylistId.emit(id);
+    this.playlistService.currentPlaylistId.set(id);
   }
   
   addPlaylist() {

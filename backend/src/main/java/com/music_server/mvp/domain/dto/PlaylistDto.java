@@ -12,17 +12,17 @@ public class PlaylistDto {
 
     private String creator;
 
-    private List<PlaylistItemDto> songs;
+    private List<PlaylistItemDto> items;
 
 
     public PlaylistDto() {
     }
 
-    public PlaylistDto(Long id, String title, String creator, List<PlaylistItemDto> songs) {
+    public PlaylistDto(Long id, String title, String creator, List<PlaylistItemDto> items) {
         this.id = id;
         this.title = title;
         this.creator = creator;
-        this.songs = songs;
+        this.items = items;
     }
 
 
@@ -61,11 +61,11 @@ public class PlaylistDto {
     }
 
     public List<PlaylistItemDto> getItems() {
-        return songs;
+        return items;
     }
 
     public void setItems(List<PlaylistItemDto> items) {
-        this.songs = items;
+        this.items = items;
     }
 
     

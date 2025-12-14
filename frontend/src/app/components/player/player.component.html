@@ -1,15 +1,22 @@
 <div class="player-container flex flex-col items-center justify-center text-center">
-  @if (currentTrack$) {
-    <h2 class="track-title text-xl font-bold">Super</h2>
+  @if (currentSong() != null) {
+    <h2 class="track-title text-xl font-bold">{{ currentSong()!.song.title }}</h2>
 
     <div class="controls flex gap-4 mt-4">
-      <button (click)="prev()">⏮️</button>
-      <button (click)="togglePlayPause()">
-        {{ (isPlaying$ | async) ? '⏸️' : '▶️' }}
+      <button type="button" aria-label="Previous track" (click)="prev()">⏮️</button>
+
+      <button
+        type="button"
+        aria-label="Play / Pause"
+        (click)="togglePlayPause()">
+        {{ isPlaying() ? '⏸️' : '▶️' }}
       </button>
-      <button (click)="next()">⏭️</button>
+
+      <button type="button" aria-label="Next track" (click)="next()">⏭️</button>
     </div>
   } @else {
-    <p class="text-gray-500">Choisissez une chanson pour commencer à jouer 🎵</p>
+    <p class="text-gray-500">
+      Choisissez une chanson pour commencer à jouer 🎵
+    </p>
   }
 </div>

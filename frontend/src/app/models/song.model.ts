@@ -5,18 +5,18 @@ export class Song {
     title: string;          // titre de la chanson
     owner: string;         // album (optionnel)
     
-    constructor(title: string, owner: string,id?: string){
+    constructor(title: string, owner: string, id?: string){
         this.id = id;
         this.title = title;
         this.owner = owner
     }
 
     // Factory method to create a Song instance from a plain object
-  static fromDto(dto: any): Song {
+  static fromDto(dto: Song): Song {
     return new Song(
-      dto.id,
       dto.title,
-      dto.owner
+      dto.owner,
+      dto.id!
     );
   }
 

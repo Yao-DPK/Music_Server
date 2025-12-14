@@ -68,6 +68,9 @@ public class SongController {
             songEntity.setTitle(title);
             songEntity.setOwner(connectedUser.getName());
 
+            System.out.printf("New Song Owner: ", songEntity.getOwner());
+            System.out.printf("New Song Title: ", songEntity.getTitle());
+
             SongEntity savedSong = songService.create(songEntity);
 
             System.out.println("Receiving Song: " + title);

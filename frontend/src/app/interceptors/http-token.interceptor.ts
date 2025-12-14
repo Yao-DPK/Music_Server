@@ -18,14 +18,12 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return this.keycloakService.updateTokenIfNeeded().pipe(
       switchMap(() => {
-        const kc = this.keycloakService.keycloak;
-        const token = kc?.token;
-        //console.log('JWT being sent:', token);
-
+        const token = this.keycloakService.keycloak?.token;
+  
         const cloned = token
           ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
           : req;
-
+  
         return next.handle(cloned);
       })
     );

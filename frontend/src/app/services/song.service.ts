@@ -13,13 +13,7 @@ export class AudioService {
 
   constructor(private http: HttpClient) {}
 
-  uploadAudio(file: File) {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    return this.http.post(`${this.baseUrl}/upload`, formData);
-  }
-
+  
   getSongs(){
     return this.http.get<Song[]>(`${this.baseUrl}/songs/me`);
   }

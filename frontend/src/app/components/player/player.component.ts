@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, inject, Input, OnInit, signal, Signal, SimpleChanges } from '@angular/core';
 import { PlayerService } from '../../services/player.service';
-import { Observable } from 'rxjs';
 import { Song } from '../../models/song.model';
 import { AsyncPipe } from '@angular/common';
 
@@ -11,29 +10,30 @@ import { AsyncPipe } from '@angular/common';
   styleUrls: ['./player.component.scss'],
   imports: [AsyncPipe]
 })
-export class PlayerComponent implements OnInit {
-  currentTrack$: Observable<Song | null>; 
-  isPlaying$: Observable<boolean>;
+export class PlayerComponent{
+  @Input({ required: true }) songs!: Signal<Song[]>;
+  @Input() songId?: string;
+  playerService = inject(PlayerService);
 
-  constructor(private playerService: PlayerService) {
-    this.currentTrack$ = new Observable();
-    this.isPlaying$ = this.playerService.getIsPlaying();
-  }
+  readonly isPlaying = this.playerService.getIsPlaying();
 
-  ngOnInit() {}
-
+  readonly currentSong = computed(() => {
+    return this.playerService.currentSong();
+  });
+  
   togglePlayPause() {
-    this.isPlaying$.subscribe(isPlaying => {
-      if (isPlaying) this.playerService.pause();
+      if (this.isPlaying()) this.playerService.pause();
       else this.playerService.play();
-    }).unsubscribe();
+ 
   }
 
   next() {
-    this.playerService.nextTrack(); // à implémenter
+    /* this.playerService.nextTrack(); // à implémenter */
+    console.log("Suivant");
   }
 
   prev() {
-    this.playerService.prevTrack(); // à implémenter
+    /* this.playerService.prevTrack(); // à implémenter */
+    console.log("Précedent");
   }
 }
