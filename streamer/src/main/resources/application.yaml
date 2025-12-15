@@ -1,0 +1,11 @@
+server:
+  port: 8090
+spring:
+  application:
+    name: streamer
+  web:
+    resources:
+      static-locations: 
+        - file:/audio-data/
+    cache:
+        period: 365d

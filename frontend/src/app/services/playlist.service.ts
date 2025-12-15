@@ -1,9 +1,9 @@
 // src/app/services/playlist.service.ts
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { BehaviorSubject, firstValueFrom, Observable, of } from 'rxjs';
+import {firstValueFrom, of } from 'rxjs';
 import { Playlist } from '../models/playlist.model';
 import { Song } from '../models/song.model';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { KeycloakService } from './keycloak/keycloak.service';
@@ -26,7 +26,12 @@ export class PlaylistService {
   async loadAll(): Promise<void> {
     try {
       const list = await firstValueFrom(
-        this.http.get<Playlist[]>(`${environment.apiUrl}/playlists/me`), {defaultValue: null}
+        this.http.get<Playlist[]>(`${environment.apiUrl}/playlists/me`).pipe(
+          catchError(err => {
+            console.error(err);
+            return of([]);
+          })
+        )
       );
 
       const playlists = Array.isArray(list)
@@ -35,8 +40,10 @@ export class PlaylistService {
 
       this.playlists.set(playlists);
       console.log("Received Playlists: ", playlists);
+
       if (!this.currentPlaylistId() && playlists.length) {
-        this.currentPlaylistId.set(playlists.find(p => p.title === "All Songs")!.id!);
+        const defaultPl = playlists.find(p => p.title === 'All Songs') ?? playlists[0];
+        this.currentPlaylistId.set(defaultPl.id!);
       }
       console.log("Currently loaded playlist: ", this.currentPlaylist());
 
@@ -60,10 +67,7 @@ export class PlaylistService {
       this.http.post<Playlist>(`${environment.apiUrl}/playlists/me`, payload)
     );
 
-    this.playlists.update(pls => [
-      ...pls,
-      Playlist.fromDto(created)
-    ]);
+    await this.loadAll;
   }
 
   addSong(playlistId: string, song: Song) {
@@ -82,9 +86,9 @@ export class PlaylistService {
     );
   }
 
-  searchPlaylists = computed(() => (query: string) =>
-    this.playlists().filter(p =>
+  searchPlaylists(query: string): Playlist[] {
+    return this.playlists().filter(p =>
       p.title.toLowerCase().includes(query.toLowerCase())
-    )
-  );
+    );
+  }
 } 

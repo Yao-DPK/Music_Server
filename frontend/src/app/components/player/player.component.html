@@ -15,9 +15,12 @@
       <button type="button" aria-label="Next track" (click)="next()">⏭️</button>
     </div>
 
+    <!-- Audio element -->
+    <audio #audioPlayer (ended)="next()" controls></audio>
+
     <div class="queueList">
-      <ul >
-        <li class="queueListItem" *ngFor="let song of currentQueue()">
+      <ul>
+        <li class="queueListItem" *ngFor="let song of currentQueue()" (click)="playSong(song)">
           <p>
             {{ song.song.title }}
           </p>

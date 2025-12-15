@@ -3,7 +3,7 @@ services:
     image: postgres:14
     container_name: music_db
     env_file:
-      - ../backend/infrastructure/env_files/.env.dev
+      - ../infrastructure/env_files/.env.dev
     ports:
       - "5437:5432"
     volumes:
@@ -18,11 +18,26 @@ services:
     ports:
       - "9097:8080"
     env_file:
-      - ../backend/infrastructure/env_files/.env.dev
+      - ../infrastructure/env_files/.env.dev
     networks:  
       - music_network
     command: 
       - "start-dev"
+
+  audio-streamer:
+    container_name: streaming-service
+    image: audio-streamer
+    build:
+      context: ../streamer
+    env_file:
+     - ../infrastructure/env_files/.env.dev
+    ports:
+      - "8097:8090"
+    volumes:
+      - ../streamer/audio-data:/audio-data
+    networks:
+      - music_network
+    
 
 networks:
   music_network:
