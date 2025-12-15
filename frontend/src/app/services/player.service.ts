@@ -14,16 +14,14 @@ export class PlayerService {
   private queue = signal<PlaylistItem[]>([]);
   currentSongId = signal<string | null>(null);
   private isPlaying = signal<boolean>(false);
-  private currentIndex = -1;
-
-
-  
+  private currentIndex = signal<number>(0);
 
   readonly currentSong = computed(() => {
     const id = this.currentSongId();
     return this.playlistService.currentPlaylist()?.items.find(p => p.id === id) ?? null;
   });
 
+  
 
   // === Observables pour les composants ===
   getCurrentTrack(): Signal<PlaylistItem | null> {
@@ -36,25 +34,28 @@ export class PlayerService {
 
   // === Contrôles du player ===
   play() {
-    if (this.currentSong()!.song) this.isPlaying.set(true);
+    if (this.currentSong()) this.isPlaying.set(true);
   }
 
   pause() {
-    if (this.currentSong()!.song) this.isPlaying.set(false);
+    if (this.currentSong()) this.isPlaying.set(false);
   }
 
   // === Gestion de la queue ===
-  setQueue(songs: PlaylistItem[], startIndex: number = 0) {
+  setQueue(songs: PlaylistItem[]) {
     this.queue.set(songs);
-    this.currentIndex = startIndex;
-    this.currentSongId.set(this.queue()[this.currentIndex].id!);
     this.play();
   }
 
+  getQueue(){
+    return this.queue;
+  }
+
   nextTrack() {
-    if (this.currentIndex < this.queue.length - 1) {
-      this.currentIndex++;
-      this.currentSongId.set(this.queue()![this.currentIndex].id!);
+    if (this.currentIndex() < this.queue().length - 1) {
+      console.log('Courrent Index: ', this.currentIndex());
+      this.currentIndex.update(val => val + 1);
+      this.currentSongId.set(this.queue()![this.currentIndex()].id!);
       this.play();
     } else {
       this.pause(); // fin de la queue
@@ -62,9 +63,10 @@ export class PlayerService {
   }
 
   prevTrack() {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
-      this.currentSongId.set(this.queue()![this.currentIndex].id!);
+    if (this.currentIndex() > 0) {
+      console.log('Courrent Index: ', this.currentIndex());
+      this.currentIndex.update(val => val - 1);
+      this.currentSongId.set(this.queue()![this.currentIndex()].id!);
       this.play();
     } else{
       this.pause();
@@ -75,8 +77,7 @@ export class PlayerService {
   // === Reset player ===
   reset() {
     this.currentSongId.set(this.playlistService.currentPlaylist()!.items[0].id!);
-    this.pause;
     this.queue.set([]);
-    this.currentIndex = -1;
+    this.currentIndex.set(-1);
   } 
 }

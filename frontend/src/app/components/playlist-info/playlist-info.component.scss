@@ -6,12 +6,12 @@
     margin: 1rem auto;
     input { padding: 0.5rem; margin-right: 0.5rem; }
     button { padding: 0.5rem 1rem; }
+    button:hover{ cursor: pointer; }
+
     .song-list { 
         flex:1;
         overflow-y: auto;
-        list-style: none; 
         padding: 0; 
-        
         border-bottom: 1px solid #ccc; 
         border-top: 1px solid #ccc;
     }

@@ -34,10 +34,16 @@ export class PlaylistInfoComponent{
     this.searchControl.valueChanges.pipe(debounceTime(300)),
     { initialValue: '' }
   );
+
+  setQueue(){
+    this.playerService.currentSongId.set(this.playlist()()!.items![0].id!);
+    this.playerService.setQueue(this.playlist()()!.items!);
+  }
   
   selectSong(id: string) {
     this.currentSongId.emit(id);
     this.playerService.currentSongId.set(id);
+    this.playerService.setQueue(this.playlist()()!.items!);
   }
 
   // 2. Utilise le signal de query pour filtrer via ton service

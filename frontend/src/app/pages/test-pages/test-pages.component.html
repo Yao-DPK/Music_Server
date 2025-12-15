@@ -13,7 +13,9 @@
         </div>
         <div class="player-card">
             <app-player [songId]="currentSongId()" [songs]="current_songs"></app-player>
+        </div>
 
+        <!-- <div class="controls">
             <input
             type="file"
             accept="audio/*"
@@ -25,7 +27,7 @@
                 <div class="file-upload">
                     <button class="upload-btn" (click)="fileInput.click()"> Click Me to Upload</button>
                 </div>
-            </div>
+        </div> -->
 
         <div class="playlist-info-card"><app-playlist-info  [playlistId]="currentPlaylistId" (currentSongId)="onSongChange($event)" ></app-playlist-info></div>
         

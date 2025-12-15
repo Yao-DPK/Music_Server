@@ -1,25 +1,28 @@
 import { Component, computed, inject, Input, OnInit, signal, Signal, SimpleChanges } from '@angular/core';
 import { PlayerService } from '../../services/player.service';
 import { Song } from '../../models/song.model';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgForOf } from '@angular/common';
 
 
 @Component({
   selector: 'app-player',
   templateUrl: './player.component.html',
   styleUrls: ['./player.component.scss'],
-  imports: [AsyncPipe]
+  imports: [AsyncPipe, NgForOf]
 })
 export class PlayerComponent{
   @Input({ required: true }) songs!: Signal<Song[]>;
   @Input() songId?: string;
   playerService = inject(PlayerService);
 
+  
+
   readonly isPlaying = this.playerService.getIsPlaying();
 
-  readonly currentSong = computed(() => {
-    return this.playerService.currentSong();
-  });
+  readonly currentSong = this.playerService.currentSong;
+
+
+  readonly currentQueue = this.playerService.getQueue();
   
   togglePlayPause() {
       if (this.isPlaying()) this.playerService.pause();
@@ -28,12 +31,12 @@ export class PlayerComponent{
   }
 
   next() {
-    /* this.playerService.nextTrack(); // à implémenter */
+    this.playerService.nextTrack(); // à implémenter 
     console.log("Suivant");
   }
 
   prev() {
-    /* this.playerService.prevTrack(); // à implémenter */
+    this.playerService.prevTrack(); // à implémenter 
     console.log("Précedent");
   }
 }

@@ -1,4 +1,4 @@
-<div class="player-container flex flex-col items-center justify-center text-center">
+<div class="player-container">
   @if (currentSong() != null) {
     <h2 class="track-title text-xl font-bold">{{ currentSong()!.song.title }}</h2>
 
@@ -14,6 +14,17 @@
 
       <button type="button" aria-label="Next track" (click)="next()">⏭️</button>
     </div>
+
+    <div class="queueList">
+      <ul >
+        <li class="queueListItem" *ngFor="let song of currentQueue()">
+          <p>
+            {{ song.song.title }}
+          </p>
+        </li>
+      </ul>
+    </div>
+
   } @else {
     <p class="text-gray-500">
       Choisissez une chanson pour commencer à jouer 🎵

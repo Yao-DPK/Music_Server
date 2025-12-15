@@ -3,8 +3,8 @@
     <h2>{{ pl.title }}</h2>
     <!-- <p>Total Songs: {{ pl.items.length }}</p> -->
     <!-- Add new song -->
-    <div class="add-song">
-      <input type="text" placeholder="Song title" [(ngModel)]="newSongTitle">
+    <div class="controls">
+      <button (click)="setQueue()">Start</button>
       <button (click)="addSong()">Add Song</button>
     </div>
   
