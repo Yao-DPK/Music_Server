@@ -15,5 +15,11 @@
 - Fixed Frontend design
 - Implemented Upload Song 
 ### Next:
-- Improve reactive data flow
 - Add song upload refresh
+
+# Day 2
+### Today
+- Design  Song Upload
+  
+### Tomorrow
+- ReImplement Song Upload

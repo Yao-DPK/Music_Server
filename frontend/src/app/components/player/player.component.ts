@@ -52,7 +52,7 @@ export class PlayerComponent{
 
     const player = this.audioPlayer.nativeElement;
     // URL points directly to Spring Boot static file
-    player.src = `http://localhost:8097/Down-Bad.mp3`; 
+    player.src = `http://localhost:8097/${song.song.title}`; 
     player.load();
     player.play();
     this.playerService.play();

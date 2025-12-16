@@ -17,7 +17,6 @@ import { PlayerService } from '../../services/player.service';
   imports: [FormsModule, ReactiveFormsModule, CommonModule]
 })
 export class PlaylistInfoComponent{
-  @Input({required: true}) playlistId!: Signal<string>;
   @Output() currentSongId = new EventEmitter<string>();
   
   newSongTitle = '';
