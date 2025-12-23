@@ -1,36 +1,50 @@
-<div class="player-container">
-  @if (currentSong() != null) {
-    <h2 class="track-title text-xl font-bold">{{ currentSong()!.song.title }}</h2>
+<div class="player-container" *ngIf="currentSong() != null; else noSong">
+  <h2 class="track-title text-xl font-bold">{{ currentSong()!.song.title }}</h2>
 
-    <div class="controls flex gap-4 mt-4">
-      <button type="button" aria-label="Previous track" (click)="prev()">⏮️</button>
+  <!-- Custom Controls -->
+  <div class="controls flex gap-4 mt-4">
+    <button type="button" aria-label="Previous track" (click)="prev()">⏮️</button>
 
-      <button
-        type="button"
-        aria-label="Play / Pause"
-        (click)="togglePlayPause()">
-        {{ isPlaying() ? '⏸️' : '▶️' }}
-      </button>
+    <button type="button" aria-label="Play / Pause" (click)="togglePlayPause()">
+      {{ isPlaying() ? '⏸️' : '▶️' }}
+    </button>
 
-      <button type="button" aria-label="Next track" (click)="next()">⏭️</button>
-    </div>
+    <button type="button" aria-label="Next track" (click)="next()">⏭️</button>
+  </div>
 
-    <!-- Audio element -->
-    <audio #audioPlayer (ended)="next()" controls></audio>
+  <!-- Progress bar -->
+  <div class="progress-container mt-2 flex items-center gap-2">
+    <span>{{ formatTime(currentTime()) }}</span>
+    <input
+      type="range"
+      min="0"
+      [max]="duration()"
+      [value]="currentTime()"
+      (input)="seek($event)"
+      class="flex-1"
+    />
+    <span>{{ formatTime(duration()) }}</span>
+  </div>
 
-    <div class="queueList">
-      <ul>
-        <li class="queueListItem" *ngFor="let song of currentQueue()" (click)="playSong(song)">
-          <p>
-            {{ song.song.title }}
-          </p>
-        </li>
-      </ul>
-    </div>
+  <!-- Hidden audio element -->
+  <audio #audioPlayer (ended)="next()" style="display: none;"></audio>
 
-  } @else {
-    <p class="text-gray-500">
-      Choisissez une chanson pour commencer à jouer 🎵
-    </p>
-  }
+  <!-- Queue -->
+  <div class="queueList mt-4">
+    <ul>
+      <li
+        class="queueListItem cursor-pointer"
+        *ngFor="let song of currentQueue()"
+        (click)="playSong(song)"
+      >
+        <p>{{ song.song.title }}</p>
+      </li>
+    </ul>
+  </div>
 </div>
+
+<ng-template #noSong>
+  <p class="text-gray-500">
+    Choisissez une chanson pour commencer à jouer 🎵
+  </p>
+</ng-template>
